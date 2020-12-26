@@ -1,5 +1,7 @@
 package ge.edu.btu.model;
 
+import java.util.Map;
+
 public class Employee {
     private long id;
     private String name;
@@ -8,9 +10,9 @@ public class Employee {
     private String age;
     private String position;
     private String p_id;
-    private String salary;
+    private Map<String, Integer> salary;
 
-    public Employee(String name, String surname, String nickname, String age, String position, String p_id, String salary) {
+    public Employee(String name, String surname, String nickname, String age, String position, String p_id, Map<String, Integer> salary) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
@@ -20,11 +22,11 @@ public class Employee {
         this.salary = salary;
     }
 
-    public String getSalary() {
+    public Map<String, Integer> getSalary() {
         return salary;
     }
 
-    public void setSalary(String salary) {
+    public void setSalary(Map<String, Integer> salary) {
         this.salary = salary;
     }
 
@@ -74,5 +76,9 @@ public class Employee {
 
     public void setP_id(String p_id) {
         this.p_id = p_id;
+    }
+
+    void salaryToString(){
+
     }
 }

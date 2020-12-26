@@ -24,3 +24,6 @@ CREATE TABLE salary (
     name VARCHAR(100),
     active_date VARCHAR(100)
 )
+
+ALTER TABLE office
+    INSERT
