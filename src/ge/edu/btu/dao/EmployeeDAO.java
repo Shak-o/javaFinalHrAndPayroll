@@ -9,5 +9,5 @@ public interface EmployeeDAO {
     void takeEmployee(Employee emplyoee);
     void deleteEmployee(Employee emplyoee);
     void editEmployee(Employee emplyoee);
-    void closeConnection();
+    void closeConnection() throws SQLException;
 }

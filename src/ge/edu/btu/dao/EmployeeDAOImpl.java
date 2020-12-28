@@ -13,9 +13,22 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public void addEmployee(Employee emplyoee) throws SQLException {
+    public void addEmployee(Employee employee) throws SQLException {
+        long position_id = 1;
+        //some logic to get position_id
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
-                "(name,surname,nickname,age,gender,position,position,p_id,position_id,active_date,salary) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
+                "(name,surname,nickname,age,gender,position,p_id,position_id,active_date,salary) VALUES (?,?,?,?,?,?,?,?,?,?)");
+        preparedStatement.setString(1,employee.getName());
+        preparedStatement.setString(2,employee.getSurname());
+        preparedStatement.setString(3,employee.getNickname());
+        preparedStatement.setString(4,employee.getAge());
+        preparedStatement.setString(5,employee.getGender());
+        preparedStatement.setString(6,employee.getPosition());
+        preparedStatement.setString(7,employee.getP_id());
+        preparedStatement.setLong(8,position_id);
+
+
+        preparedStatement.executeUpdate();
         preparedStatement.close();
     }
 
@@ -35,7 +48,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public void closeConnection(){
-
+    public void closeConnection() throws SQLException {
+        connection.close();
     }
 }

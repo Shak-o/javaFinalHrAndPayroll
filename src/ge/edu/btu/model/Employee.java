@@ -10,6 +10,7 @@ public class Employee {
     private String age;
     private String position;
     private String p_id;
+    private String gender;
     private Map<String, Integer> salary;
 
     public Employee(String name, String surname, String nickname, String age, String position, String p_id, Map<String, Integer> salary) {
@@ -78,6 +79,13 @@ public class Employee {
         this.p_id = p_id;
     }
 
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
     void salaryToString(){
 
     }
