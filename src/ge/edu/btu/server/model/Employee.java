@@ -1,4 +1,4 @@
-package ge.edu.btu.model;
+package ge.edu.btu.server.model;
 
 import java.util.Map;
 

@@ -1,4 +1,4 @@
-package ge.edu.btu.dao;
+package ge.edu.btu.server.dao;
 
 public class SalaryDAOImpl {
 

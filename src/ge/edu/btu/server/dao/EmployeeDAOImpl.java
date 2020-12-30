@@ -1,21 +1,23 @@
-package ge.edu.btu.dao;
-import ge.edu.btu.model.Employee;
-import javax.swing.plaf.nimbus.State;
+package ge.edu.btu.server.dao;
+import ge.edu.btu.server.model.Employee;
+
 import java.sql.*;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
     private Connection connection;
-
+    private String errors;
     public EmployeeDAOImpl() throws SQLException {
         Driver driver = new org.postgresql.Driver();
         DriverManager.registerDriver(driver);
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Employee","postgres","");
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Employees","postgres","");
     }
 
     @Override
     public void addEmployee(Employee employee) throws SQLException {
-        long position_id = 1;
-        //some logic to get position_id
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position == "+ employee.getPosition());
+        long position_id = resultSet.getLong("position_id");
+
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
                 "(name,surname,nickname,age,gender,position,p_id,position_id,active_date,salary) VALUES (?,?,?,?,?,?,?,?,?,?)");
         preparedStatement.setString(1,employee.getName());
@@ -27,28 +29,34 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         preparedStatement.setString(7,employee.getP_id());
         preparedStatement.setLong(8,position_id);
 
-
         preparedStatement.executeUpdate();
         preparedStatement.close();
     }
 
     @Override
-    public void takeEmployee(Employee emplyoee) {
+    public void takeEmployee(Employee employee) throws SQLException {
 
     }
 
     @Override
-    public void deleteEmployee(Employee emplyoee) {
+    public void deleteEmployee(Employee employee) {
 
     }
 
     @Override
-    public void editEmployee(Employee emplyoee) {
+    public void editEmployee(Employee employee) {
 
     }
 
     @Override
     public void closeConnection() throws SQLException {
         connection.close();
+    }
+
+    public void testResult(String tposition) throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '?'");
+        long position_id = resultSet.getLong("position_id");
+        System.out.println(position_id);
     }
 }

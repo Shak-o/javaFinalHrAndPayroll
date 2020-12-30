@@ -1,4 +1,4 @@
-package ge.edu.btu.model;
+package ge.edu.btu.server.model;
 
 public class Office {
     private long id;
