@@ -2,6 +2,7 @@ package ge.edu.btu.server.dao;
 import ge.edu.btu.server.model.Employee;
 
 import java.sql.*;
+import java.util.Calendar;
 
 public class EmployeeDAOImpl implements EmployeeDAO {
     private Connection connection;
@@ -14,9 +15,13 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public void addEmployee(Employee employee) throws SQLException {
+        String pid ="";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position == "+ employee.getPosition());
-        long position_id = resultSet.getLong("position_id");
+        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '"+employee.getPosition()+"'");
+        while (resultSet.next()){
+            String position_id = resultSet.getString("position_id");
+            pid = position_id;
+        }
 
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
                 "(name,surname,nickname,age,gender,position,p_id,position_id,active_date,salary) VALUES (?,?,?,?,?,?,?,?,?,?)");
@@ -27,7 +32,9 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         preparedStatement.setString(5,employee.getGender());
         preparedStatement.setString(6,employee.getPosition());
         preparedStatement.setString(7,employee.getP_id());
-        preparedStatement.setLong(8,position_id);
+        preparedStatement.setString(8,pid);
+        preparedStatement.setDate(9,null);
+        preparedStatement.setString(10,employee.getSalary());
 
         preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -55,8 +62,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     public void testResult(String tposition) throws SQLException {
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '?'");
-        long position_id = resultSet.getLong("position_id");
-        System.out.println(position_id);
+        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = 'test' ");
+        while (resultSet.next()){
+            String position_id = resultSet.getString("position_id");
+            System.out.println(position_id);
+        }
+        statement.close();
     }
 }

@@ -11,9 +11,9 @@ public class Employee {
     private String position;
     private String p_id;
     private String gender;
-    private Map<String, Integer> salary;
+    private String salary;
 
-    public Employee(String name, String surname, String nickname, String age, String position, String p_id, Map<String, Integer> salary) {
+    public Employee(String name, String surname, String nickname, String age,String gender, String position, String p_id, String salary) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
@@ -21,13 +21,14 @@ public class Employee {
         this.position = position;
         this.p_id = p_id;
         this.salary = salary;
+        this.gender = gender;
     }
 
-    public Map<String, Integer> getSalary() {
+    public String getSalary() {
         return salary;
     }
 
-    public void setSalary(Map<String, Integer> salary) {
+    public void setSalary(String salary) {
         this.salary = salary;
     }
 
