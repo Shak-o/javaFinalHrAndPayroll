@@ -15,13 +15,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public void addEmployee(Employee employee) throws SQLException {
-        String pid ="";
+        String pid = "";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '"+employee.getPosition()+"'");
         while (resultSet.next()){
             String position_id = resultSet.getString("position_id");
             pid = position_id;
         }
+        statement.close();
 
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
                 "(name,surname,nickname,age,gender,position,p_id,position_id,active_date,salary) VALUES (?,?,?,?,?,?,?,?,?,?)");
