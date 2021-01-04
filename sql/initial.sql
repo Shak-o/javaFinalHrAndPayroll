@@ -7,11 +7,11 @@ CREATE TABLE employee (
     gender VARCHAR(100),
     position VARCHAR(100),
     position_id VARCHAR(100),
-    active_date DATE,
+    active_date VARCHAR(100),
     salary varchar(100),
     p_id VARCHAR(11) NOT NULL
-);
 
+);
 CREATE TABLE office (
     id BIGSERIAL PRIMARY KEY,
     structure VARCHAR(100),
@@ -25,5 +25,3 @@ CREATE TABLE salary (
     active_date VARCHAR(100)
 )
 
-ALTER TABLE office
-    INSERT

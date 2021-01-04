@@ -11,7 +11,9 @@ public class Runner {
     public static void main (String[] args) throws SQLException {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         //employeeDAO.testResult("test");
-        employeeDAO.addEmployee(new Employee("first", "employee", "zura", "25","male" ,"test", "12345678901","1" ));
+        employeeDAO.addEmployee(
+                new Employee("third", "employee", "date", "25","male" ,"test", "12345678901","1" )
+        );
         employeeDAO.closeConnection();
     }
 }
