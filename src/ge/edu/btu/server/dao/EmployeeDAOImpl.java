@@ -12,10 +12,18 @@ import java.util.Calendar;
 public class EmployeeDAOImpl implements EmployeeDAO {
     private Connection connection;
     private String errors;
+
     public EmployeeDAOImpl() throws SQLException {
         Driver driver = new org.postgresql.Driver();
         DriverManager.registerDriver(driver);
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Employees","postgres","");
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Employees","postgres","test");
+    }
+
+    private String getDateToday(){
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        String formattedNow = dtf.format(now);
+        return formattedNow;
     }
 
     @Override
@@ -29,9 +37,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             positionId = position_id;
         }
         statement.close();
-        //get today date
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
 
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
                 "(name,surname,nickname,age,gender,position,p_id,position_id,active_date,salary) VALUES (?,?,?,?,?,?,?,?,?,?)");
@@ -43,7 +48,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         preparedStatement.setString(6,employee.getPosition());
         preparedStatement.setString(7,employee.getP_id());
         preparedStatement.setString(8,positionId);
-        preparedStatement.setString(9, dtf.format(now));
+        preparedStatement.setString(9,getDateToday());
         preparedStatement.setString(10,employee.getSalary().toString());
 
         preparedStatement.executeUpdate();
@@ -70,10 +75,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         }
         statement.close();
 
-        //get today date
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
-        LocalDateTime now = LocalDateTime.now();
-
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE employee SET " +
                 "name = ?,surname = ?,nickname = ?,age = ?,gender = ?, position = ?,p_id = ?,position_id = ? ,active_date = ?,salary = ? WHERE id = ?");
         preparedStatement.setString(1,employee.getName());
@@ -84,7 +85,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         preparedStatement.setString(5,employee.getPosition());
         preparedStatement.setString(5,employee.getP_id());
         preparedStatement.setString(5,positionId);
-        preparedStatement.setString(6,dtf.format(now));
+        preparedStatement.setString(6,getDateToday());
 
 
         preparedStatement.executeUpdate();
