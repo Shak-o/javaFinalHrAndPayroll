@@ -10,13 +10,7 @@ import java.sql.SQLException;
 public class Runner {
     public static void main (String[] args) throws SQLException {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
-        //employeeDAO.testResult("test");
-        /*
-        employeeDAO.addEmployee(
-                new Employee("fourth", "employee", "date", "25","male" ,"test", "12345678901","1" )
-        );
+        System.out.println(employeeDAO.getAllEmployee());
         employeeDAO.closeConnection();
-
-         */
     }
 }

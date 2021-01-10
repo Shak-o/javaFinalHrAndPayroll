@@ -6,7 +6,7 @@ import java.text.SimpleDateFormat;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
+import java.util.*;
 
 
 public class EmployeeDAOImpl implements EmployeeDAO {
@@ -16,10 +16,10 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public EmployeeDAOImpl() throws SQLException {
         Driver driver = new org.postgresql.Driver();
         DriverManager.registerDriver(driver);
-        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Employees","postgres","test");
+        connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Employees", "postgres", "test");
     }
 
-    private String getDateToday(){
+    private String getDateToday() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String formattedNow = dtf.format(now);
@@ -31,8 +31,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         //get position id
         String positionId = "";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '"+employee.getPosition()+"'");
-        while (resultSet.next()){
+        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '" + employee.getPosition() + "'");
+        while (resultSet.next()) {
             String position_id = resultSet.getString("position_id");
             positionId = position_id;
         }
@@ -40,16 +40,16 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
                 "(name,surname,nickname,age,gender,position,p_id,position_id,active_date,salary) VALUES (?,?,?,?,?,?,?,?,?,?)");
-        preparedStatement.setString(1,employee.getName());
-        preparedStatement.setString(2,employee.getSurname());
-        preparedStatement.setString(3,employee.getNickname());
-        preparedStatement.setString(4,employee.getAge());
-        preparedStatement.setString(5,employee.getGender());
-        preparedStatement.setString(6,employee.getPosition());
-        preparedStatement.setString(7,employee.getP_id());
-        preparedStatement.setString(8,positionId);
-        preparedStatement.setString(9,getDateToday());
-        preparedStatement.setString(10,employee.getSalary().toString());
+        preparedStatement.setString(1, employee.getName());
+        preparedStatement.setString(2, employee.getSurname());
+        preparedStatement.setString(3, employee.getNickname());
+        preparedStatement.setString(4, employee.getAge());
+        preparedStatement.setString(5, employee.getGender());
+        preparedStatement.setString(6, employee.getPosition());
+        preparedStatement.setString(7, employee.getP_id());
+        preparedStatement.setString(8, positionId);
+        preparedStatement.setString(9, getDateToday());
+        preparedStatement.setString(10, employee.getSalary().toString());
 
         preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -58,7 +58,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     @Override
     public void deleteEmployee(String P_id) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM employee WHERE id = ?");
-        preparedStatement.setString(1,P_id );
+        preparedStatement.setString(1, P_id);
         preparedStatement.executeUpdate();
         preparedStatement.close();
     }
@@ -68,8 +68,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         //get position id
         String positionId = "";
         Statement statement = connection.createStatement();
-        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '"+employee.getPosition()+"'");
-        while (resultSet.next()){
+        ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '" + employee.getPosition() + "'");
+        while (resultSet.next()) {
             String position_id = resultSet.getString("position_id");
             positionId = position_id;
         }
@@ -77,15 +77,15 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE employee SET " +
                 "name = ?,surname = ?,nickname = ?,age = ?,gender = ?, position = ?,p_id = ?,position_id = ? ,active_date = ?,salary = ? WHERE id = ?");
-        preparedStatement.setString(1,employee.getName());
-        preparedStatement.setString(2,employee.getSurname());
-        preparedStatement.setString(3,employee.getNickname());
-        preparedStatement.setString(4,employee.getAge());
-        preparedStatement.setString(5,employee.getGender());
-        preparedStatement.setString(5,employee.getPosition());
-        preparedStatement.setString(5,employee.getP_id());
-        preparedStatement.setString(5,positionId);
-        preparedStatement.setString(6,getDateToday());
+        preparedStatement.setString(1, employee.getName());
+        preparedStatement.setString(2, employee.getSurname());
+        preparedStatement.setString(3, employee.getNickname());
+        preparedStatement.setString(4, employee.getAge());
+        preparedStatement.setString(5, employee.getGender());
+        preparedStatement.setString(5, employee.getPosition());
+        preparedStatement.setString(5, employee.getP_id());
+        preparedStatement.setString(5, positionId);
+        preparedStatement.setString(6, getDateToday());
 
 
         preparedStatement.executeUpdate();
@@ -101,10 +101,50 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     public void testResult(String tposition) throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = 'test' ");
-        while (resultSet.next()){
+        while (resultSet.next()) {
             String position_id = resultSet.getString("position_id");
             System.out.println(position_id);
         }
         statement.close();
     }
+
+    private Map<String, Integer> convertSalary(String salary) {
+        Map<String, Integer> myMap = new HashMap<String, Integer>();
+        String[] pairs = salary.split(",");
+        for (int i = 0; i < pairs.length; i++) {
+            String pair = pairs[i];
+            String[] keyValue = pair.split(":");
+            myMap.put(keyValue[0], Integer.valueOf(keyValue[1]));
+        }
+        return myMap;
+    }
+
+    @Override
+    public List<Employee> getAllEmployee() throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
+
+        List<Employee> list = new ArrayList<>();
+        while (resultSet.next()) {
+            long id = resultSet.getLong("id");
+            String name = resultSet.getString("name");
+            String surname = resultSet.getString("surname");
+            String nickname = resultSet.getString("nickname");
+            String gender = resultSet.getString("gender");
+            String p_id = resultSet.getString("p_id");
+            String age = resultSet.getString("age");
+            String salary = resultSet.getString("salary");
+            String position = resultSet.getString("position");
+            Employee employee = new Employee(name, surname, nickname, gender, age, p_id, position, convertSalary("SALES:0,SALE_PRODUCTS:1,EXPENSES:2,EXPENSES_ITEMS:3"));
+            list.add(employee);
+        }
+        statement.close();
+        return list;
+    }
+
+    @Override
+    public void getEmployee() {
+
+    }
 }
+

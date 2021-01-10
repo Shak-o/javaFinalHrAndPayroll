@@ -3,6 +3,7 @@ package ge.edu.btu.server.dao;
 import ge.edu.btu.server.model.Employee;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface EmployeeDAO {
     void addEmployee(Employee emplyoee) throws SQLException;
@@ -10,4 +11,6 @@ public interface EmployeeDAO {
     void editEmployee(long id, Employee employee) throws SQLException;
     void closeConnection() throws SQLException;
     void testResult(String tposition) throws SQLException;
+    List<Employee> getAllEmployee() throws SQLException;
+    void getEmployee();
 }
