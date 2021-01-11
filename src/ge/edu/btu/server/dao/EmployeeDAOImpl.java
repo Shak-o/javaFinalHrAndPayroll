@@ -1,13 +1,10 @@
 package ge.edu.btu.server.dao;
-import ge.edu.btu.server.model.Employee;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+import ge.edu.btu.server.model.Employee;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-
 
 public class EmployeeDAOImpl implements EmployeeDAO {
     private Connection connection;
@@ -57,7 +54,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
 
     @Override
     public void deleteEmployee(String P_id) throws SQLException {
-        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM employee WHERE id = ?");
+        PreparedStatement preparedStatement = connection.prepareStatement("DELETE FROM employee WHERE p_id = ?");
         preparedStatement.setString(1, P_id);
         preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -108,7 +105,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         statement.close();
     }
 
-    private Map<String, Integer> convertSalary(String salary) {
+    private Map<String, Integer> salaryToMap(String salary) {
         Map<String, Integer> myMap = new HashMap<String, Integer>();
         String[] pairs = salary.split(",");
         for (int i = 0; i < pairs.length; i++) {
@@ -120,7 +117,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public List<Employee> getAllEmployee() throws SQLException {
+    public List<Employee> getAllEmployees() throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
 
@@ -135,7 +132,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             String age = resultSet.getString("age");
             String salary = resultSet.getString("salary");
             String position = resultSet.getString("position");
-            Employee employee = new Employee(name, surname, nickname, gender, age, p_id, position, convertSalary("SALES:0,SALE_PRODUCTS:1,EXPENSES:2,EXPENSES_ITEMS:3"));
+            Employee employee = new Employee(name, surname, nickname, gender, age, p_id, position, salaryToMap("SALES:0,SALE_PRODUCTS:1,EXPENSES:2,EXPENSES_ITEMS:3"));
             list.add(employee);
         }
         statement.close();

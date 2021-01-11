@@ -17,8 +17,8 @@ public class HrApp extends Application {
     public static void main (String[] args) throws SQLException {
         launch(args);
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
-        for (int i= employeeDAO.getAllEmployee().size(); i!=0; i--){
-            System.out.println(employeeDAO.getAllEmployee());
+        for (int i= employeeDAO.getAllEmployees().size(); i!=0; i--){
+            System.out.println(employeeDAO.getAllEmployees());
         }
     }
 

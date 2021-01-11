@@ -6,7 +6,7 @@ import ge.edu.btu.server.model.Employee;
 import java.util.Map;
 
 import java.sql.SQLException;
-
+/*
 public class Runner {
     public static void main (String[] args) throws SQLException {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
@@ -14,3 +14,4 @@ public class Runner {
         employeeDAO.closeConnection();
     }
 }
+*/

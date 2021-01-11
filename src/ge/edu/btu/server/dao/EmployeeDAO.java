@@ -11,6 +11,6 @@ public interface EmployeeDAO {
     void editEmployee(long id, Employee employee) throws SQLException;
     void closeConnection() throws SQLException;
     void testResult(String tposition) throws SQLException;
-    List<Employee> getAllEmployee() throws SQLException;
+    List<Employee> getAllEmployees() throws SQLException;
     void getEmployee();
 }

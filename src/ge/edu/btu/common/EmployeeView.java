@@ -7,6 +7,14 @@ public class EmployeeView {
     private String p_id;
     private String position;
 
+    public EmployeeView(long id, String name, String surname, String p_id, String position) {
+        this.id = id;
+        this.name = name;
+        this.surname = surname;
+        this.p_id = p_id;
+        this.position = position;
+    }
+
     public long getId() {
         return id;
     }
