@@ -79,11 +79,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         preparedStatement.setString(3, employee.getNickname());
         preparedStatement.setString(4, employee.getAge());
         preparedStatement.setString(5, employee.getGender());
-        preparedStatement.setString(5, employee.getPosition());
-        preparedStatement.setString(5, employee.getP_id());
-        preparedStatement.setString(5, positionId);
-        preparedStatement.setString(6, getDateToday());
-
+        preparedStatement.setString(6, employee.getPosition());
+        preparedStatement.setString(7, employee.getP_id());
+        preparedStatement.setString(8, positionId);
+        preparedStatement.setString(9, getDateToday());
+        preparedStatement.setString(10, employee.getSalary().toString());
+        preparedStatement.setLong(11, id);
 
         preparedStatement.executeUpdate();
 
@@ -132,7 +133,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             String age = resultSet.getString("age");
             String salary = resultSet.getString("salary");
             String position = resultSet.getString("position");
-            Employee employee = new Employee(name, surname, nickname, gender, age, p_id, position, salaryToMap("SALES:0,SALE_PRODUCTS:1,EXPENSES:2,EXPENSES_ITEMS:3"));
+            Employee employee = new Employee(name, surname, nickname, gender, age, p_id, position, salaryToMap(salary));
             list.add(employee);
         }
         statement.close();
