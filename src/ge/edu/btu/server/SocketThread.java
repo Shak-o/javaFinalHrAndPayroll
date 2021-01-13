@@ -3,8 +3,7 @@ package ge.edu.btu.server;
 import ge.edu.btu.common.Command;
 import ge.edu.btu.server.dao.EmployeeDAO;
 import ge.edu.btu.server.dao.OfficeDAO;
-
-
+import ge.edu.btu.server.model.Employee;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -16,11 +15,10 @@ public class SocketThread extends Thread {
     private EmployeeDAO employeeDAO;
     private OfficeDAO officeDAO;
 
-    public SocketThread(Socket socket, EmployeeDAO employeeDAO, OfficeDAO officeDAO) throws IOException {
+    public SocketThread(Socket socket, EmployeeDAO employeeDAO) throws IOException {
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
         this.employeeDAO = employeeDAO;
-        this.officeDAO = officeDAO;
     }
 
     @Override
@@ -30,21 +28,27 @@ public class SocketThread extends Thread {
                 Command command = (Command) in.readObject();
                 switch (command){
                     case ADD_OFFICE:
-                        officeDAO.addStructure(); //DUNNO HOW TO GET INFO THERE
+                        //officeDAO.addStructure();
                     case ADD_EMPLOYEE:
-                        employeeDAO.addEmployee();
-                    case ADD_SALARY:
-
+                        Employee employee = (Employee) in.readObject();
+                        employeeDAO.addEmployee(employee);
+                        break;
                     case EDIT_OFFICE:
-                        officeDAO.editStructure();
-                    case EDIT_SALARY:
+                      //  officeDAO.editStructure();
                     case DELETE_OFFICE:
-                        officeDAO.deleteStructure();
-                    case DELETE_SALARY:
+                       // officeDAO.deleteStructure();
                     case EDIT_EMPLOYEE:
-                        employeeDAO.editEmployee();
+                        Long id = (Long) in.readObject();
+                        Employee employeeEdit = (Employee) in.readObject();
+                        employeeDAO.editEmployee(id,employeeEdit);
+                        break;
                     case DELETE_EMPLOYEE:
-                        employeeDAO.deleteEmployee();
+                        String p_id = (String) in.readObject();
+                        employeeDAO.deleteEmployee(p_id);
+                        break;
+                    case GET_ALL_EMPLOYEES:
+                        out.writeObject(employeeDAO.getAllEmployees());
+                        break;
                 }
             }
            catch (Exception exception){

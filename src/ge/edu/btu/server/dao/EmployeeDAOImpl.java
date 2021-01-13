@@ -106,12 +106,12 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         statement.close();
     }
 
-    private Map<String, Integer> salaryToMap(String salary) {
+    public Map<String, Integer> salaryToMap(String salary) {
         Map<String, Integer> myMap = new HashMap<String, Integer>();
         String[] pairs = salary.split(",");
         for (int i = 0; i < pairs.length; i++) {
             String pair = pairs[i];
-            String[] keyValue = pair.split(":");
+            String[] keyValue = pair.split("=");
             myMap.put(keyValue[0], Integer.valueOf(keyValue[1]));
         }
         return myMap;
@@ -133,7 +133,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             String age = resultSet.getString("age");
             String salary = resultSet.getString("salary");
             String position = resultSet.getString("position");
-            Employee employee = new Employee(name, surname, nickname, gender, age, p_id, position, salaryToMap(salary));
+            Employee employee = new Employee(name, surname, nickname, gender, age, p_id, position, salary);
             list.add(employee);
         }
         statement.close();

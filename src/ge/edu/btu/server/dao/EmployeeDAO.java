@@ -4,6 +4,7 @@ import ge.edu.btu.server.model.Employee;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public interface EmployeeDAO {
     void addEmployee(Employee emplyoee) throws SQLException;
@@ -13,4 +14,5 @@ public interface EmployeeDAO {
     void testResult(String tposition) throws SQLException;
     List<Employee> getAllEmployees() throws SQLException;
     void getEmployee();
+    Map<String, Integer> salaryToMap(String salary);
 }

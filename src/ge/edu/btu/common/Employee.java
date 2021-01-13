@@ -1,6 +1,4 @@
-package ge.edu.btu.server.model;
-
-import java.util.Map;
+package ge.edu.btu.common;
 
 public class Employee {
     private long id;
