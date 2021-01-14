@@ -1,13 +1,17 @@
 package ge.edu.btu.server;
 
 import ge.edu.btu.common.Command;
+import ge.edu.btu.common.EmployeeView;
 import ge.edu.btu.server.dao.EmployeeDAO;
 import ge.edu.btu.server.dao.OfficeDAO;
 import ge.edu.btu.server.model.Employee;
+
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 
 public class SocketThread extends Thread {
     private ObjectOutputStream out;
@@ -47,12 +51,14 @@ public class SocketThread extends Thread {
                         employeeDAO.deleteEmployee(p_id);
                         break;
                     case GET_ALL_EMPLOYEES:
-                        out.writeObject(employeeDAO.getAllEmployees());
+                        List <EmployeeView> employeeList = employeeDAO.getAllEmployees();
+                        out.writeObject(employeeList);
                         break;
                 }
             }
            catch (Exception exception){
                exception.printStackTrace();
+               break;
             }
 
         }

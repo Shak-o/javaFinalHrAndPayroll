@@ -1,26 +1,35 @@
 package ge.edu.btu.common;
 
-public class EmployeeView {
+import java.io.Serializable;
+
+public class EmployeeView implements Serializable {
     private long id;
     private String name;
     private String surname;
-    private String p_id;
+    private String nickname;
+    private String age;
     private String position;
+    private String p_id;
+    private String gender;
+    private String salary;
 
-    public EmployeeView(long id, String name, String surname, String p_id, String position) {
-        this.id = id;
+    public EmployeeView(String name, String surname, String nickname, String age, String gender, String p_id, String position, String salary) {
         this.name = name;
         this.surname = surname;
-        this.p_id = p_id;
+        this.nickname = nickname;
+        this.age = age;
         this.position = position;
+        this.p_id = p_id;
+        this.salary = salary;
+        this.gender = gender;
     }
 
-    public long getId() {
-        return id;
+    public String getSalary() {
+        return salary;
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public void setSalary(String salary) {
+        this.salary = salary;
     }
 
     public String getName() {
@@ -39,12 +48,20 @@ public class EmployeeView {
         this.surname = surname;
     }
 
-    public String getP_id() {
-        return p_id;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setP_id(String p_id) {
-        this.p_id = p_id;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getAge() {
+        return age;
+    }
+
+    public void setAge(String age) {
+        this.age = age;
     }
 
     public String getPosition() {
@@ -53,5 +70,24 @@ public class EmployeeView {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    public String getP_id() {
+        return p_id;
+    }
+
+    public void setP_id(String p_id) {
+        this.p_id = p_id;
+    }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+    void salaryToString(){
+
     }
 }

@@ -1,5 +1,6 @@
 package ge.edu.btu.server.dao;
 
+import ge.edu.btu.common.EmployeeView;
 import ge.edu.btu.server.model.Employee;
 
 import java.sql.SQLException;
@@ -12,7 +13,7 @@ public interface EmployeeDAO {
     void editEmployee(long id, Employee employee) throws SQLException;
     void closeConnection() throws SQLException;
     void testResult(String tposition) throws SQLException;
-    List<Employee> getAllEmployees() throws SQLException;
+    List<EmployeeView> getAllEmployees() throws SQLException;
     void getEmployee();
     Map<String, Integer> salaryToMap(String salary);
 }

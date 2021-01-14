@@ -1,5 +1,6 @@
 package ge.edu.btu.server.dao;
 
+import ge.edu.btu.common.EmployeeView;
 import ge.edu.btu.server.model.Employee;
 import java.sql.*;
 import java.time.LocalDateTime;
@@ -118,11 +119,11 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public List<Employee> getAllEmployees() throws SQLException {
+    public List<EmployeeView> getAllEmployees() throws SQLException {
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT * FROM employee");
 
-        List<Employee> list = new ArrayList<>();
+        List<EmployeeView> list = new ArrayList<>();
         while (resultSet.next()) {
             long id = resultSet.getLong("id");
             String name = resultSet.getString("name");
@@ -133,7 +134,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             String age = resultSet.getString("age");
             String salary = resultSet.getString("salary");
             String position = resultSet.getString("position");
-            Employee employee = new Employee(name, surname, nickname, gender, age, p_id, position, salary);
+            EmployeeView employee = new EmployeeView(name, surname, nickname, gender, age, p_id, position, salary);
             list.add(employee);
         }
         statement.close();

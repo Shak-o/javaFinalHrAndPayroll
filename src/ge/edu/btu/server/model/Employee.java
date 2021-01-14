@@ -1,8 +1,9 @@
 package ge.edu.btu.server.model;
 
+import java.io.Serializable;
 import java.util.Map;
 
-public class Employee {
+public class Employee implements Serializable {
     private long id;
     private String name;
     private String surname;
