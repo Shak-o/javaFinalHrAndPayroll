@@ -2,6 +2,7 @@ package ge.edu.btu.server;
 
 import ge.edu.btu.common.Command;
 import ge.edu.btu.common.EmployeeView;
+import ge.edu.btu.common.OfficeView;
 import ge.edu.btu.server.dao.EmployeeDAO;
 import ge.edu.btu.server.dao.OfficeDAO;
 import ge.edu.btu.server.model.Employee;
@@ -19,10 +20,11 @@ public class SocketThread extends Thread {
     private EmployeeDAO employeeDAO;
     private OfficeDAO officeDAO;
 
-    public SocketThread(Socket socket, EmployeeDAO employeeDAO) throws IOException {
+    public SocketThread(Socket socket, EmployeeDAO employeeDAO, OfficeDAO officeDAO) throws IOException {
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
         this.employeeDAO = employeeDAO;
+        this.officeDAO = officeDAO;
     }
 
     @Override
@@ -32,9 +34,11 @@ public class SocketThread extends Thread {
                 Command command = (Command) in.readObject();
                 switch (command){
                     case ADD_OFFICE:
-                        //officeDAO.addStructure();
+                        OfficeView office = (OfficeView) in.readObject();
+                        officeDAO.addStructure(office);
+                        break;
                     case ADD_EMPLOYEE:
-                        Employee employee = (Employee) in.readObject();
+                        EmployeeView employee = (EmployeeView) in.readObject();
                         employeeDAO.addEmployee(employee);
                         break;
                     case EDIT_OFFICE:
@@ -43,7 +47,7 @@ public class SocketThread extends Thread {
                        // officeDAO.deleteStructure();
                     case EDIT_EMPLOYEE:
                         Long id = (Long) in.readObject();
-                        Employee employeeEdit = (Employee) in.readObject();
+                        EmployeeView employeeEdit = (EmployeeView) in.readObject();
                         employeeDAO.editEmployee(id,employeeEdit);
                         break;
                     case DELETE_EMPLOYEE:
@@ -53,6 +57,10 @@ public class SocketThread extends Thread {
                     case GET_ALL_EMPLOYEES:
                         List <EmployeeView> employeeList = employeeDAO.getAllEmployees();
                         out.writeObject(employeeList);
+                        break;
+                    case GET_ALL_OFFICE:
+                        List <OfficeView> officeList = officeDAO.getAllOffice();
+                        out.writeObject(officeList);
                         break;
                 }
             }

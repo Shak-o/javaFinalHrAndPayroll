@@ -1,23 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="ge.edu.btu.client.console.HrController"
-            prefHeight="400.0" prefWidth="600.0">
+<StackPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ge.edu.btu.client.console.HrController">
+   <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
+     <tabs>
+       <Tab text="Employee">
+         <content>
+           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+             <HBox>
+                 <VBox>
+                     <TableView fx:id="employeeTable">
+                         <columns>
+                             <TableColumn fx:id="nameColumn" text="Name" />
+                             <TableColumn fx:id="surnameColumn" text="Surname" />
+                             <TableColumn fx:id="nicknameColumn" text="Nickname" />
+                             <TableColumn fx:id="pIdColumn" text="Personal Id" />
+                             <TableColumn fx:id="positionColumn" text="Position" />
+                             <TableColumn fx:id="salaryColumn" text="Salary" />
 
-    <TableView fx:id="employeeTable">
-        <columns>
-            <TableColumn fx:id="nameColumn" text="Name" />
-            <TableColumn fx:id="surnameColumn" text="Surname"/>
-            <TableColumn fx:id="pIdColumn" text="Personal Id"/>
-            <TableColumn fx:id="positionColumn" text="Position"/>
-        </columns>
-    </TableView>
+                         </columns>
+                     </TableView>
+                 </VBox>
+                 <VBox>
+                     <TextField fx:id="nameField" promptText="Name" />
+                     <TextField fx:id="surnameField" promptText="Surname" />
+                     <TextField fx:id="nicknameField" promptText="Nicnkame" />
+                     <TextField fx:id="genderField" promptText="Gender" />
+                     <TextField fx:id="ageField" promptText="Age" />
+                     <TextField fx:id="positionNameField" promptText="Position" />
+                     <TextField fx:id="persIdField" promptText="Personal ID" />
+                     <TextField fx:id="salaryField" promptText="Accrual:quantity, Deduction:quantity" />
+                     <Button contentDisplay="RIGHT" onAction="#addEmployee" prefHeight="25.0" prefWidth="133.0">Create</Button>
+                 </VBox>
+             </HBox>
+         </content>
+       </Tab>
+       <Tab text="Office">
+         <content>
+             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+             <HBox>
+                 <VBox>
+                     <TableView fx:id="officeTable">
+                         <columns>
+                             <TableColumn fx:id="officeNameColumn" text="Name" />
+                             <TableColumn fx:id="positionNameColumn" text="Position" />
+                             <TableColumn fx:id="positionIdColumn" text="Position ID" />
+                         </columns>
+                    </TableView>
+                 </VBox>
+                 <VBox>
+                     <TextField fx:id="officeNameField" promptText="Name" />
+                     <TextField fx:id="officePositionNameField" promptText="Position Name" />
+                     <TextField fx:id="positionIdField" promptText="Position ID" />
+                     <Button contentDisplay="RIGHT" onAction="#addOffice" prefHeight="25.0" prefWidth="133.0">Create</Button>
+                 </VBox>
+             </HBox>
+         </content>
+       </Tab>
+         <Tab text="salaries">
+             <content>
+                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+
+             </content>
+         </Tab>
+     </tabs>
+   </TabPane>
 
 </StackPane>

@@ -1,8 +1,12 @@
 package ge.edu.btu.server.dao;
 
+import ge.edu.btu.common.EmployeeView;
+import ge.edu.btu.common.OfficeView;
 import ge.edu.btu.server.model.Office;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OfficeDAOImpl implements OfficeDAO {
     private Connection connection;
@@ -14,7 +18,7 @@ public class OfficeDAOImpl implements OfficeDAO {
     }
 
     @Override
-    public void addStructure(Office office) throws SQLException {
+    public void addStructure(OfficeView office) throws SQLException {
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO office " +
                 "(structure, position, position_id) VALUES (?,?,?)");
         preparedStatement.setString(1, office.getStructure());
@@ -47,5 +51,22 @@ public class OfficeDAOImpl implements OfficeDAO {
         preparedStatement.close();
     }
 
+    @Override
+    public List<OfficeView> getAllOffice() throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM office");
+
+        List<OfficeView> list = new ArrayList<>();
+        while (resultSet.next()){
+            long id = resultSet.getLong("id");
+            String structure = resultSet.getString("structure");
+            String position = resultSet.getString("position");
+            String position_id = resultSet.getString("position_id");
+            OfficeView office = new OfficeView(structure,position,position_id);
+            list.add(office);
+        }
+        statement.close();
+        return list;
+    }
 
 }

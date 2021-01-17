@@ -25,7 +25,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public void addEmployee(Employee employee) throws SQLException {
+    public void addEmployee(EmployeeView employee) throws SQLException {
         //get position id
         String positionId = "";
         Statement statement = connection.createStatement();
@@ -47,7 +47,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         preparedStatement.setString(7, employee.getP_id());
         preparedStatement.setString(8, positionId);
         preparedStatement.setString(9, getDateToday());
-        preparedStatement.setString(10, employee.getSalary().toString());
+        preparedStatement.setString(10, employee.getSalary());
 
         preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -62,14 +62,14 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     @Override
-    public void editEmployee(long id, Employee employee) throws SQLException {
+    public void editEmployee(long id, EmployeeView employee) throws SQLException {
         //get position id
         String positionId = "";
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '" + employee.getPosition() + "'");
         while (resultSet.next()) {
-            String position_id = resultSet.getString("position_id");
-            positionId = position_id;
+            String positionIdPar = resultSet.getString("position_id");
+            positionId = positionIdPar;
         }
         statement.close();
 

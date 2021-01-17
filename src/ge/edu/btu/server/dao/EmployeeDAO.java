@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 public interface EmployeeDAO {
-    void addEmployee(Employee emplyoee) throws SQLException;
+    void addEmployee(EmployeeView emplyoee) throws SQLException;
     void deleteEmployee(String p_id) throws SQLException;
-    void editEmployee(long id, Employee employee) throws SQLException;
+    void editEmployee(long id, EmployeeView employee) throws SQLException;
     void closeConnection() throws SQLException;
     void testResult(String tposition) throws SQLException;
     List<EmployeeView> getAllEmployees() throws SQLException;

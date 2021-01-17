@@ -14,12 +14,12 @@ import java.sql.SQLException;
 public class Server {
     public static void main(String[] args) throws IOException, SQLException {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
-        //OfficeDAO officeDAO = new OfficeDAOImpl();
+        OfficeDAO officeDAO = new OfficeDAOImpl();
         ServerSocket serverSocket = new ServerSocket(8080);
 
         while (true){
             Socket socket = serverSocket.accept();
-            SocketThread socketThread = new SocketThread(socket,employeeDAO);
+            SocketThread socketThread = new SocketThread(socket,employeeDAO,officeDAO);
             socketThread.start();
         }
     }

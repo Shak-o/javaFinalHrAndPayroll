@@ -7,5 +7,6 @@ public enum Command {
     ADD_OFFICE,
     EDIT_OFFICE,
     DELETE_OFFICE,
-    GET_ALL_EMPLOYEES
+    GET_ALL_EMPLOYEES,
+    GET_ALL_OFFICE
 }
