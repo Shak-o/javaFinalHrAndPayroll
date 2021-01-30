@@ -18,8 +18,6 @@
                              <TableColumn fx:id="nicknameColumn" text="Nickname" />
                              <TableColumn fx:id="pIdColumn" text="Personal Id" />
                              <TableColumn fx:id="positionColumn" text="Position" />
-                             <TableColumn fx:id="salaryColumn" text="Salary" />
-
                          </columns>
                      </TableView>
                  </VBox>
@@ -31,8 +29,9 @@
                      <TextField fx:id="ageField" promptText="Age" />
                      <TextField fx:id="positionNameField" promptText="Position" />
                      <TextField fx:id="persIdField" promptText="Personal ID" />
-                     <TextField fx:id="salaryField" promptText="Accrual:quantity, Deduction:quantity" />
                      <Button contentDisplay="RIGHT" onAction="#addEmployee" prefHeight="25.0" prefWidth="133.0">Create</Button>
+                     <TextField fx:id="idForDelField" promptText="ID" />
+                     <Button contentDisplay="RIGHT" onAction="#deleteEmployee" prefHeight="25.0" prefWidth="133.0">Delete</Button>
                  </VBox>
              </HBox>
          </content>
@@ -59,13 +58,31 @@
              </HBox>
          </content>
        </Tab>
-         <Tab text="salaries">
+         <Tab text="Salaries">
              <content>
                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
-
+                 <HBox>
+                     <VBox>
+                         <TableView fx:id="salaryTable">
+                             <columns>
+                                 <TableColumn fx:id="employeeIdColumn" text="Employee ID" />
+                                 <TableColumn fx:id="deductionColumn" text="Deduction" />
+                                 <TableColumn fx:id="accurancyColumn" text="Accurancy" />
+                                 <TableColumn fx:id="bonusesColumn" text="Bonuses" />
+                                 <TableColumn fx:id="totalColumn" text="Total Salary" />
+                             </columns>
+                         </TableView>
+                     </VBox>
+                     <VBox>
+                         <TextField fx:id="employeeIdField" promptText="Employee ID" />
+                         <TextField fx:id="deductionField" promptText="Deduction" />
+                         <TextField fx:id="accurancyField" promptText="Accurancy" />
+                         <TextField fx:id="bonusesField" promptText="Bonuses" />
+                         <Button contentDisplay="RIGHT" onAction="#deleteEmployee" prefHeight="25.0" prefWidth="133.0">Create</Button>
+                     </VBox>
+                 </HBox>
              </content>
          </Tab>
      </tabs>
    </TabPane>
-
 </StackPane>

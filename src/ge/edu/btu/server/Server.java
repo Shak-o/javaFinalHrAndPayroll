@@ -1,9 +1,6 @@
 package ge.edu.btu.server;
 
-import ge.edu.btu.server.dao.EmployeeDAO;
-import ge.edu.btu.server.dao.EmployeeDAOImpl;
-import ge.edu.btu.server.dao.OfficeDAO;
-import ge.edu.btu.server.dao.OfficeDAOImpl;
+import ge.edu.btu.server.dao.*;
 import ge.edu.btu.server.model.Office;
 
 import java.io.IOException;
@@ -15,11 +12,12 @@ public class Server {
     public static void main(String[] args) throws IOException, SQLException {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         OfficeDAO officeDAO = new OfficeDAOImpl();
+        SalaryDAO salaryDAO = new SalaryDAOImpl();
         ServerSocket serverSocket = new ServerSocket(8080);
 
         while (true){
             Socket socket = serverSocket.accept();
-            SocketThread socketThread = new SocketThread(socket,employeeDAO,officeDAO);
+            SocketThread socketThread = new SocketThread(socket,employeeDAO,officeDAO,salaryDAO);
             socketThread.start();
         }
     }

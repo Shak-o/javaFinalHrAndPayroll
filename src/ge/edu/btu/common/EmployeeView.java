@@ -11,26 +11,17 @@ public class EmployeeView implements Serializable {
     private String position;
     private String p_id;
     private String gender;
-    private String salary;
 
-    public EmployeeView(String name, String surname, String nickname, String age, String gender, String p_id, String position, String salary) {
+    public EmployeeView(String name, String surname, String nickname, String age, String gender, String p_id, String position) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
         this.age = age;
         this.position = position;
         this.p_id = p_id;
-        this.salary = salary;
         this.gender = gender;
     }
 
-    public String getSalary() {
-        return salary;
-    }
-
-    public void setSalary(String salary) {
-        this.salary = salary;
-    }
 
     public String getName() {
         return name;

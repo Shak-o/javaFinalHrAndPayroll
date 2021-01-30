@@ -37,7 +37,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         statement.close();
 
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
-                "(name,surname,nickname,age,gender,position,p_id,position_id,active_date,salary) VALUES (?,?,?,?,?,?,?,?,?,?)");
+                "(name,surname,nickname,age,gender,position,p_id,position_id,active_date) VALUES (?,?,?,?,?,?,?,?,?,?)");
         preparedStatement.setString(1, employee.getName());
         preparedStatement.setString(2, employee.getSurname());
         preparedStatement.setString(3, employee.getNickname());
@@ -47,7 +47,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         preparedStatement.setString(7, employee.getP_id());
         preparedStatement.setString(8, positionId);
         preparedStatement.setString(9, getDateToday());
-        preparedStatement.setString(10, employee.getSalary());
 
         preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -74,7 +73,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         statement.close();
 
         PreparedStatement preparedStatement = connection.prepareStatement("UPDATE employee SET " +
-                "name = ?,surname = ?,nickname = ?,age = ?,gender = ?, position = ?,p_id = ?,position_id = ? ,active_date = ?,salary = ? WHERE id = ?");
+                "name = ?,surname = ?,nickname = ?,age = ?,gender = ?, position = ?,p_id = ?,position_id = ? ,active_date = ? WHERE id = ?");
         preparedStatement.setString(1, employee.getName());
         preparedStatement.setString(2, employee.getSurname());
         preparedStatement.setString(3, employee.getNickname());
@@ -84,8 +83,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         preparedStatement.setString(7, employee.getP_id());
         preparedStatement.setString(8, positionId);
         preparedStatement.setString(9, getDateToday());
-        preparedStatement.setString(10, employee.getSalary().toString());
-        preparedStatement.setLong(11, id);
+        preparedStatement.setLong(10, id);
 
         preparedStatement.executeUpdate();
 
@@ -107,17 +105,6 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         statement.close();
     }
 
-    public Map<String, Integer> salaryToMap(String salary) {
-        Map<String, Integer> myMap = new HashMap<String, Integer>();
-        String[] pairs = salary.split(",");
-        for (int i = 0; i < pairs.length; i++) {
-            String pair = pairs[i];
-            String[] keyValue = pair.split("=");
-            myMap.put(keyValue[0], Integer.valueOf(keyValue[1]));
-        }
-        return myMap;
-    }
-
     @Override
     public List<EmployeeView> getAllEmployees() throws SQLException {
         Statement statement = connection.createStatement();
@@ -134,7 +121,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             String age = resultSet.getString("age");
             String salary = resultSet.getString("salary");
             String position = resultSet.getString("position");
-            EmployeeView employee = new EmployeeView(name, surname, nickname, gender, age, p_id, position, salary);
+            EmployeeView employee = new EmployeeView(name, surname, nickname, gender, age, p_id, position);
             list.add(employee);
         }
         statement.close();

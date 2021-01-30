@@ -3,11 +3,13 @@ package ge.edu.btu.client.console;
 import ge.edu.btu.common.Command;
 import ge.edu.btu.common.EmployeeView;
 import ge.edu.btu.common.OfficeView;
+import ge.edu.btu.common.SalaryView;
 import ge.edu.btu.server.model.Employee;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
@@ -68,9 +70,6 @@ public class HrController {
     private TextField persIdField;
 
     @FXML
-    private TextField salaryField;
-
-    @FXML
     private TextField officeNameField;
 
     @FXML
@@ -88,11 +87,44 @@ public class HrController {
     @FXML
     private TableColumn<OfficeView, String> positionIdColumn;
 
+    @FXML
+    private TextField idForDelField;
+
+    @FXML
+    private TableView<SalaryView> salaryTable;
+
+    @FXML
+    private TableColumn<SalaryView,String> employeeIdColumn;
+
+    @FXML
+    private TableColumn<SalaryView,Double> deductionColumn;
+
+    @FXML
+    private TableColumn<SalaryView,Double> accurancyColumn;
+
+    @FXML
+    private TableColumn<SalaryView,Double> bonusesColumn;
+
+    @FXML
+    private TextField employeeIdField;
+
+    @FXML
+    private TextField deductionField;
+
+    @FXML
+    private TextField accurancyField;
+
+    @FXML
+    private TextField bonusesField;
+
+
     public void initialize() throws IOException, ClassNotFoundException {
         initEmployeesTable();
         initOfficeTable();
+        initSalaryTable();
         reloadEmployeeTable();
         reloadOfficeTable();
+        reloadSalaryTable();
     }
 
     private void initEmployeesTable(){
@@ -101,13 +133,19 @@ public class HrController {
         nicknameColumn.setCellValueFactory(new PropertyValueFactory<>("nickname"));
         pIdColumn.setCellValueFactory(new PropertyValueFactory<>("p_id"));
         positionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
-        salaryColumn.setCellValueFactory(new PropertyValueFactory<>("salary"));
     }
 
     private void initOfficeTable(){
         officeNameColumn.setCellValueFactory(new PropertyValueFactory<>("structure"));
         positionNameColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
         positionIdColumn.setCellValueFactory(new PropertyValueFactory<>("position_id"));
+    }
+
+    private void initSalaryTable(){
+        employeeIdColumn.setCellValueFactory(new PropertyValueFactory<>("emp_id"));
+        deductionColumn.setCellValueFactory(new PropertyValueFactory<>("deduction"));
+        accurancyColumn.setCellValueFactory(new PropertyValueFactory<>("accurancy"));
+        bonusesColumn.setCellValueFactory(new PropertyValueFactory<>("bonuses"));
     }
 
     private void reloadOfficeTable() throws IOException, ClassNotFoundException {
@@ -133,9 +171,20 @@ public class HrController {
         socket.close();
     }
 
+    private void reloadSalaryTable() throws IOException, ClassNotFoundException {
+        Socket socket = new Socket("localhost",8080);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        out.writeObject(Command.GET_ALL_SALARIES);
+        List<SalaryView> salaries = (List<SalaryView>) in.readObject();
+        ObservableList<SalaryView> observableList = FXCollections.observableList(salaries);
+        salaryTable.setItems(observableList);
+        socket.close();
+    }
+
     public void addEmployee() throws IOException, ClassNotFoundException {
         EmployeeView employee = new EmployeeView(
-                nameField.getText(),surnameField.getText(),nicknameField.getText(),ageField.getText(),genderField.getText(),persIdField.getText(),positionNameField.getText(),salaryField.getText());
+                nameField.getText(),surnameField.getText(),nicknameField.getText(),ageField.getText(),genderField.getText(),persIdField.getText(),positionNameField.getText());
         Socket socket = new Socket("localhost", 8080);
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
@@ -161,5 +210,20 @@ public class HrController {
         ObservableList<OfficeView> observableList = FXCollections.observableList(offices);
         officeTable.setItems(observableList);
         socket.close();
+    }
+
+    public void deleteEmployee() throws IOException, ClassNotFoundException {
+        String p_id = idForDelField.getText();
+        Socket socket = new Socket("localhost", 8080);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        out.writeObject(Command.DELETE_EMPLOYEE);
+        out.writeObject(p_id);
+        out.writeObject(Command.GET_ALL_EMPLOYEES);
+        List<EmployeeView> employees = (List<EmployeeView>) in.readObject();
+        ObservableList<EmployeeView> observableList = FXCollections.observableList(employees);
+        employeeTable.setItems(observableList);
+        socket.close();
+
     }
 }

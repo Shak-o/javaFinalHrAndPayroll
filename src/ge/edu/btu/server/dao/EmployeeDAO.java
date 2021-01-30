@@ -15,5 +15,4 @@ public interface EmployeeDAO {
     void testResult(String tposition) throws SQLException;
     List<EmployeeView> getAllEmployees() throws SQLException;
     void getEmployee();
-    Map<String, Integer> salaryToMap(String salary);
 }

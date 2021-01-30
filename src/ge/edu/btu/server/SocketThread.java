@@ -3,8 +3,10 @@ package ge.edu.btu.server;
 import ge.edu.btu.common.Command;
 import ge.edu.btu.common.EmployeeView;
 import ge.edu.btu.common.OfficeView;
+import ge.edu.btu.common.SalaryView;
 import ge.edu.btu.server.dao.EmployeeDAO;
 import ge.edu.btu.server.dao.OfficeDAO;
+import ge.edu.btu.server.dao.SalaryDAO;
 import ge.edu.btu.server.model.Employee;
 
 
@@ -19,12 +21,14 @@ public class SocketThread extends Thread {
     private ObjectInputStream in;
     private EmployeeDAO employeeDAO;
     private OfficeDAO officeDAO;
+    private SalaryDAO salaryDAO;
 
-    public SocketThread(Socket socket, EmployeeDAO employeeDAO, OfficeDAO officeDAO) throws IOException {
+    public SocketThread(Socket socket, EmployeeDAO employeeDAO, OfficeDAO officeDAO, SalaryDAO salaryDAO) throws IOException {
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
         this.employeeDAO = employeeDAO;
         this.officeDAO = officeDAO;
+        this.salaryDAO = salaryDAO;
     }
 
     @Override
@@ -61,6 +65,10 @@ public class SocketThread extends Thread {
                     case GET_ALL_OFFICE:
                         List <OfficeView> officeList = officeDAO.getAllOffice();
                         out.writeObject(officeList);
+                        break;
+                    case GET_ALL_SALARIES:
+                        List <SalaryView> salaryList = salaryDAO.getAllSalaries();
+                        out.writeObject(salaryList);
                         break;
                 }
             }
