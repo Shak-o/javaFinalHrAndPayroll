@@ -46,7 +46,7 @@ public class HrController {
     private TableColumn<EmployeeView, String> positionColumn;
 
     @FXML
-    private TableColumn<EmployeeView, String> salaryColumn;
+    private TableColumn<EmployeeView, Double> empTotalColumn;
 
     @FXML
     private TextField nameField;
@@ -133,6 +133,7 @@ public class HrController {
         nicknameColumn.setCellValueFactory(new PropertyValueFactory<>("nickname"));
         pIdColumn.setCellValueFactory(new PropertyValueFactory<>("p_id"));
         positionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
+        empTotalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
     }
 
     private void initOfficeTable(){
@@ -183,7 +184,7 @@ public class HrController {
     }
 
     public void addEmployee() throws IOException, ClassNotFoundException {
-        EmployeeView employee = new EmployeeView(
+        Employee employee = new Employee(
                 nameField.getText(),surnameField.getText(),nicknameField.getText(),ageField.getText(),genderField.getText(),persIdField.getText(),positionNameField.getText());
         Socket socket = new Socket("localhost", 8080);
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
@@ -209,6 +210,20 @@ public class HrController {
         List<OfficeView> offices = (List<OfficeView>) in.readObject();
         ObservableList<OfficeView> observableList = FXCollections.observableList(offices);
         officeTable.setItems(observableList);
+        socket.close();
+    }
+
+    public void addSalary() throws IOException, ClassNotFoundException {
+        SalaryView salary = new SalaryView(employeeIdField.getText(),Double.parseDouble(deductionField.getText()),Double.parseDouble(accurancyField.getText()),Double.parseDouble(bonusesField.getText()));
+        Socket socket = new Socket("localhost", 8080);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        out.writeObject(Command.ADD_SALARY);
+        out.writeObject(salary);
+        out.writeObject(Command.GET_ALL_SALARIES);
+        List<SalaryView> salaries = (List<SalaryView>) in.readObject();
+        ObservableList<SalaryView> observableList = FXCollections.observableList(salaries);
+        salaryTable.setItems(observableList);
         socket.close();
     }
 

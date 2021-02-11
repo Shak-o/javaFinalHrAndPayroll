@@ -42,8 +42,12 @@ public class SocketThread extends Thread {
                         officeDAO.addStructure(office);
                         break;
                     case ADD_EMPLOYEE:
-                        EmployeeView employee = (EmployeeView) in.readObject();
+                        Employee employee = (Employee) in.readObject();
                         employeeDAO.addEmployee(employee);
+                        break;
+                    case ADD_SALARY:
+                        SalaryView salary = (SalaryView) in.readObject();
+                        salaryDAO.addSalary(salary);
                         break;
                     case EDIT_OFFICE:
                       //  officeDAO.editStructure();

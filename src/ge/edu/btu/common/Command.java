@@ -9,5 +9,6 @@ public enum Command {
     DELETE_OFFICE,
     GET_ALL_EMPLOYEES,
     GET_ALL_OFFICE,
-    GET_ALL_SALARIES
+    GET_ALL_SALARIES,
+    ADD_SALARY
 }

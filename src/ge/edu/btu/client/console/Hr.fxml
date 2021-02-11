@@ -18,6 +18,7 @@
                              <TableColumn fx:id="nicknameColumn" text="Nickname" />
                              <TableColumn fx:id="pIdColumn" text="Personal Id" />
                              <TableColumn fx:id="positionColumn" text="Position" />
+                             <TableColumn fx:id="empTotalColumn" text="Total Salary" />
                          </columns>
                      </TableView>
                  </VBox>
@@ -78,7 +79,7 @@
                          <TextField fx:id="deductionField" promptText="Deduction" />
                          <TextField fx:id="accurancyField" promptText="Accurancy" />
                          <TextField fx:id="bonusesField" promptText="Bonuses" />
-                         <Button contentDisplay="RIGHT" onAction="#deleteEmployee" prefHeight="25.0" prefWidth="133.0">Create</Button>
+                         <Button contentDisplay="RIGHT" onAction="#addSalary" prefHeight="25.0" prefWidth="133.0">Create</Button>
                      </VBox>
                  </HBox>
              </content>

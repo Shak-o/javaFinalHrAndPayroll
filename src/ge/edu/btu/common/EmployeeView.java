@@ -11,8 +11,9 @@ public class EmployeeView implements Serializable {
     private String position;
     private String p_id;
     private String gender;
+    private Double total;
 
-    public EmployeeView(String name, String surname, String nickname, String age, String gender, String p_id, String position) {
+    public EmployeeView(String name, String surname, String nickname, String age, String gender, String p_id, String position, Double total) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
@@ -20,8 +21,16 @@ public class EmployeeView implements Serializable {
         this.position = position;
         this.p_id = p_id;
         this.gender = gender;
+        this.total = total;
     }
 
+    public Double getTotal() {
+        return total;
+    }
+
+    public void setTotal(Double total) {
+        this.total = total;
+    }
 
     public String getName() {
         return name;
