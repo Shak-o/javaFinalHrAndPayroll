@@ -120,7 +120,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             String p_id = resultSet.getString("p_id");
             String age = resultSet.getString("age");
             String position = resultSet.getString("position");
-            Double total = resultSet.getDouble("total");
+            Double total = resultSet.getDouble("totalGross");
             EmployeeView employee = new EmployeeView(name, surname, nickname, gender, age, p_id, position,total);
             list.add(employee);
         }

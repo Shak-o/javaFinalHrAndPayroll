@@ -3,6 +3,7 @@ package ge.edu.btu.server.dao;
 import ge.edu.btu.common.EmployeeView;
 import ge.edu.btu.common.SalaryView;
 import ge.edu.btu.server.model.Employee;
+import ge.edu.btu.server.model.Salary;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,13 +18,18 @@ public class SalaryDAOImpl implements SalaryDAO{
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Employees", "postgres", "test");
     }
 
-    private double calculateTotal(SalaryView salary){
-        double total = salary.getAccurancy()- salary.getDeduction()+ salary.getBonuses();
+    private double calculateTotalNet(Salary salary){
+        double total = salary.getAccurancy()- salary.getDeduction() + salary.getBonuses();
+        return total;
+    }
+
+    private double calculateTotalGross(Salary salary){
+        double total = salary.getAccurancy()- salary.getDeduction()/0.98/0.8 + salary.getBonuses();
         return total;
     }
 
     @Override
-    public void addSalary(SalaryView salary) throws SQLException {
+    public void addSalary(Salary salary) throws SQLException {
         Long id = null;
         Statement statement = connection.createStatement();
         ResultSet resultSet = statement.executeQuery("SELECT id FROM employee WHERE p_id = '" + salary.getEmp_id() + "'");
@@ -33,13 +39,14 @@ public class SalaryDAOImpl implements SalaryDAO{
         statement.close();
 
         PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO salary " +
-                "(emp_id,deduction,accurancy,bonuses,total,pers_id) VALUES (?,?,?,?,?,?)");
+                "(emp_id,deduction,accurancy,bonuses,pers_id,totalnet,totalgross) VALUES (?,?,?,?,?,?,?)");
         preparedStatement.setLong(1, id);
         preparedStatement.setDouble(2, salary.getDeduction());
         preparedStatement.setDouble(3,salary.getAccurancy());
         preparedStatement.setDouble(4,salary.getBonuses());
-        preparedStatement.setDouble(5,calculateTotal(salary));
-        preparedStatement.setString(6,salary.getEmp_id());
+        preparedStatement.setString(5,salary.getEmp_id());
+        preparedStatement.setDouble(6,calculateTotalNet(salary));
+        preparedStatement.setDouble(7,calculateTotalGross(salary));
 
         preparedStatement.executeUpdate();
         preparedStatement.close();
@@ -67,7 +74,9 @@ public class SalaryDAOImpl implements SalaryDAO{
             double deduction = resultSet.getDouble("deduction");
             double accurancy = resultSet.getDouble("accurancy");
             double bonuses = resultSet.getDouble("bonuses");
-            SalaryView salary = new SalaryView(emp_id,deduction,accurancy,bonuses);
+            double totalNet = resultSet.getDouble("totalNet");
+            double totalGross = resultSet.getDouble("totalGross");
+            SalaryView salary = new SalaryView(emp_id,deduction,accurancy,bonuses,totalNet,totalGross);
             list.add(salary);
         }
         statement.close();

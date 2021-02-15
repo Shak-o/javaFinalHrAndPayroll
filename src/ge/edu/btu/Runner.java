@@ -28,7 +28,7 @@ public class Runner {
         employeeDAO.closeConnection();
 
          */
-        salaryDAO.addSalary(new SalaryView("553323412",15,100,50));
+        //salaryDAO.addSalary(new SalaryView("553323412",15,100,50));
 
     }
 }

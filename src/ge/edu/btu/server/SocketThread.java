@@ -8,6 +8,7 @@ import ge.edu.btu.server.dao.EmployeeDAO;
 import ge.edu.btu.server.dao.OfficeDAO;
 import ge.edu.btu.server.dao.SalaryDAO;
 import ge.edu.btu.server.model.Employee;
+import ge.edu.btu.server.model.Salary;
 
 
 import java.io.IOException;
@@ -22,6 +23,7 @@ public class SocketThread extends Thread {
     private EmployeeDAO employeeDAO;
     private OfficeDAO officeDAO;
     private SalaryDAO salaryDAO;
+    private boolean go = true;
 
     public SocketThread(Socket socket, EmployeeDAO employeeDAO, OfficeDAO officeDAO, SalaryDAO salaryDAO) throws IOException {
         this.out = new ObjectOutputStream(socket.getOutputStream());
@@ -46,7 +48,7 @@ public class SocketThread extends Thread {
                         employeeDAO.addEmployee(employee);
                         break;
                     case ADD_SALARY:
-                        SalaryView salary = (SalaryView) in.readObject();
+                        Salary salary = (Salary) in.readObject();
                         salaryDAO.addSalary(salary);
                         break;
                     case EDIT_OFFICE:
@@ -78,6 +80,12 @@ public class SocketThread extends Thread {
             }
            catch (Exception exception){
                exception.printStackTrace();
+               try {
+                   go = false;
+                   out.writeBoolean(go);
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
                break;
             }
 

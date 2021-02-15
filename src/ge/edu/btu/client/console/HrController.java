@@ -5,6 +5,7 @@ import ge.edu.btu.common.EmployeeView;
 import ge.edu.btu.common.OfficeView;
 import ge.edu.btu.common.SalaryView;
 import ge.edu.btu.server.model.Employee;
+import ge.edu.btu.server.model.Salary;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -150,14 +151,19 @@ public class HrController {
     }
 
     private void reloadOfficeTable() throws IOException, ClassNotFoundException {
-        Socket socket = new Socket("localhost", 8080);
-        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-        out.writeObject(Command.GET_ALL_OFFICE);
-        List<OfficeView> offices = (List<OfficeView>) in.readObject();
-        ObservableList<OfficeView> observableList = FXCollections.observableList(offices);
-        officeTable.setItems(observableList);
-        socket.close();
+        try {
+            Socket socket = new Socket("localhost", 8080);
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            out.writeObject(Command.GET_ALL_OFFICE);
+            List<OfficeView> offices = (List<OfficeView>) in.readObject();
+            ObservableList<OfficeView> observableList = FXCollections.observableList(offices);
+            officeTable.setItems(observableList);
+            socket.close();
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
     }
 
     private void reloadEmployeeTable() throws IOException, ClassNotFoundException {
@@ -185,7 +191,7 @@ public class HrController {
 
     public void addEmployee() throws IOException, ClassNotFoundException {
         Employee employee = new Employee(
-                nameField.getText(),surnameField.getText(),nicknameField.getText(),ageField.getText(),genderField.getText(),persIdField.getText(),positionNameField.getText());
+                nameField.getText(), surnameField.getText(), nicknameField.getText(), ageField.getText(), genderField.getText(), persIdField.getText(), positionNameField.getText());
         Socket socket = new Socket("localhost", 8080);
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
@@ -214,17 +220,17 @@ public class HrController {
     }
 
     public void addSalary() throws IOException, ClassNotFoundException {
-        SalaryView salary = new SalaryView(employeeIdField.getText(),Double.parseDouble(deductionField.getText()),Double.parseDouble(accurancyField.getText()),Double.parseDouble(bonusesField.getText()));
-        Socket socket = new Socket("localhost", 8080);
-        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-        out.writeObject(Command.ADD_SALARY);
-        out.writeObject(salary);
-        out.writeObject(Command.GET_ALL_SALARIES);
-        List<SalaryView> salaries = (List<SalaryView>) in.readObject();
-        ObservableList<SalaryView> observableList = FXCollections.observableList(salaries);
-        salaryTable.setItems(observableList);
-        socket.close();
+            Salary salary = new Salary(employeeIdField.getText(), Double.parseDouble(deductionField.getText()), Double.parseDouble(accurancyField.getText()), Double.parseDouble(bonusesField.getText()));
+            Socket socket = new Socket("localhost", 8080);
+            ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            out.writeObject(Command.ADD_SALARY);
+            out.writeObject(salary);
+            out.writeObject(Command.GET_ALL_SALARIES);
+            Boolean go = (Boolean) in.readObject();
+            List<SalaryView> salaries = (List<SalaryView>) in.readObject();
+            ObservableList<SalaryView> observableList = FXCollections.observableList(salaries);
+            salaryTable.setItems(observableList);
     }
 
     public void deleteEmployee() throws IOException, ClassNotFoundException {

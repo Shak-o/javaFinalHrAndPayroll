@@ -9,13 +9,24 @@ public class SalaryView implements Serializable {
     private double deduction;
     private double accurancy;
     private double bonuses;
+    private double totalNet;
+    private double totalGross;
 
-
-    public SalaryView(String emp_id, double deduction, double accurancy, double bonuses) {
+    public SalaryView(String emp_id, double deduction, double accurancy, double bonuses, double totalGross, double totalNet) {
         this.emp_id = emp_id;
         this.deduction = deduction;
         this.accurancy = accurancy;
         this.bonuses = bonuses;
+        this.totalGross = totalGross;
+        this.totalNet = totalNet;
+    }
+
+    public double getTotalNet() {
+        return totalNet;
+    }
+
+    public double getTotalGross() {
+        return totalGross;
     }
 
     public String getEmp_id() {
