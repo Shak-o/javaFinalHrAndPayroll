@@ -107,6 +107,11 @@ public class HrController {
     private TableColumn<SalaryView,Double> bonusesColumn;
 
     @FXML
+    private TableColumn<SalaryView, Double> totalGrossColumn;
+
+    @FXML
+    private TableColumn<SalaryView, Double> totalNetColumn;
+    @FXML
     private TextField employeeIdField;
 
     @FXML
@@ -148,6 +153,8 @@ public class HrController {
         deductionColumn.setCellValueFactory(new PropertyValueFactory<>("deduction"));
         accurancyColumn.setCellValueFactory(new PropertyValueFactory<>("accurancy"));
         bonusesColumn.setCellValueFactory(new PropertyValueFactory<>("bonuses"));
+        totalGrossColumn.setCellValueFactory(new PropertyValueFactory<>("totalGross"));
+        totalNetColumn.setCellValueFactory(new PropertyValueFactory<>("totalNet"));
     }
 
     private void reloadOfficeTable() throws IOException, ClassNotFoundException {
@@ -227,7 +234,6 @@ public class HrController {
             out.writeObject(Command.ADD_SALARY);
             out.writeObject(salary);
             out.writeObject(Command.GET_ALL_SALARIES);
-            Boolean go = (Boolean) in.readObject();
             List<SalaryView> salaries = (List<SalaryView>) in.readObject();
             ObservableList<SalaryView> observableList = FXCollections.observableList(salaries);
             salaryTable.setItems(observableList);

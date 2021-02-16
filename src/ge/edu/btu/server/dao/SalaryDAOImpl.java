@@ -18,14 +18,14 @@ public class SalaryDAOImpl implements SalaryDAO{
         connection = DriverManager.getConnection("jdbc:postgresql://localhost:5432/Employees", "postgres", "test");
     }
 
-    private double calculateTotalNet(Salary salary){
-        double total = salary.getAccurancy()- salary.getDeduction() + salary.getBonuses();
-        return total;
+    private Double calculateTotalNet(Salary salary){
+        double totalNet = salary.getAccurancy()- salary.getDeduction() + salary.getBonuses();
+        return totalNet;
     }
 
-    private double calculateTotalGross(Salary salary){
-        double total = salary.getAccurancy()- salary.getDeduction()/0.98/0.8 + salary.getBonuses();
-        return total;
+    private Double calculateTotalGross(Salary salary){
+        double totalGross = calculateTotalNet(salary)/0.98/0.8;
+        return totalGross;
     }
 
     @Override

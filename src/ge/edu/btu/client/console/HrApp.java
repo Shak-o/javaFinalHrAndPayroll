@@ -15,7 +15,7 @@ public class HrApp extends Application {
     public void start(Stage stage) throws Exception {
         StackPane root = FXMLLoader.load(getClass().getResource("Hr.fxml"));
         stage.setTitle("HR application");
-        stage.setScene(new Scene(root,600,400));
+        stage.setScene(new Scene(root,700,600));
         stage.show();
     }
     public static void main (String[] args) throws IOException, ClassNotFoundException {

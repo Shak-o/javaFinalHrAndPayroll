@@ -6,6 +6,7 @@ import ge.edu.btu.common.SalaryView;
 import ge.edu.btu.server.dao.*;
 import ge.edu.btu.server.model.Employee;
 import ge.edu.btu.server.model.Office;
+import ge.edu.btu.server.model.Salary;
 
 import java.util.List;
 import java.util.Map;
