@@ -21,7 +21,9 @@ CREATE TABLE office (
 
 CREATE TABLE salary (
     id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(100),
-    active_date VARCHAR(100)
-)
+    emp_id BIGSERIAL,
+    deduction FLOAT,
+    accurancy FLOAT,
+    bonuses FLOAT
+);
 
