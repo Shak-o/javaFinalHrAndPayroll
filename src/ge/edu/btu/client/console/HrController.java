@@ -10,11 +10,10 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Popup;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -233,10 +232,22 @@ public class HrController {
             ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             out.writeObject(Command.ADD_SALARY);
             out.writeObject(salary);
+            List<String> errors = (List<String>) in.readObject();
+            if (errors.size()>0) {
+                Popup popup = new Popup();
+                for (String error : errors) {
+                    Label label = new Label(error);
+                    popup.getContent().add(label);
+                    final Stage stage = new Stage();
+                    popup.show(stage);
+                    System.out.println(error);
+                }
+            }
             out.writeObject(Command.GET_ALL_SALARIES);
             List<SalaryView> salaries = (List<SalaryView>) in.readObject();
             ObservableList<SalaryView> observableList = FXCollections.observableList(salaries);
             salaryTable.setItems(observableList);
+            socket.close();
     }
 
     public void deleteEmployee() throws IOException, ClassNotFoundException {

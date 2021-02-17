@@ -50,6 +50,8 @@ public class SocketThread extends Thread {
                     case ADD_SALARY:
                         Salary salary = (Salary) in.readObject();
                         salaryDAO.addSalary(salary);
+                        out.writeObject(salaryDAO.getErrors());
+                        salaryDAO.clearErrors();
                         break;
                     case EDIT_OFFICE:
                       //  officeDAO.editStructure();
@@ -77,15 +79,10 @@ public class SocketThread extends Thread {
                         out.writeObject(salaryList);
                         break;
                 }
+
             }
            catch (Exception exception){
                exception.printStackTrace();
-               try {
-                   go = false;
-                   out.writeBoolean(go);
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
                break;
             }
 

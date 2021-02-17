@@ -11,6 +11,7 @@ import java.util.List;
 
 public class SalaryDAOImpl implements SalaryDAO{
     private Connection connection;
+    private List<String> errors = new ArrayList<>();
 
     public SalaryDAOImpl() throws SQLException {
         Driver driver = new org.postgresql.Driver();
@@ -37,19 +38,23 @@ public class SalaryDAOImpl implements SalaryDAO{
             id = resultSet.getLong("id");
         }
         statement.close();
+        if (id == null){
+            errors.add("ID not found!");
+        }
+        else {
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO salary " +
+                    "(emp_id,deduction,accurancy,bonuses,pers_id,totalnet,totalgross) VALUES (?,?,?,?,?,?,?)");
+            preparedStatement.setLong(1, id);
+            preparedStatement.setDouble(2, salary.getDeduction());
+            preparedStatement.setDouble(3, salary.getAccurancy());
+            preparedStatement.setDouble(4, salary.getBonuses());
+            preparedStatement.setString(5, salary.getEmp_id());
+            preparedStatement.setDouble(6, calculateTotalNet(salary));
+            preparedStatement.setDouble(7, calculateTotalGross(salary));
 
-        PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO salary " +
-                "(emp_id,deduction,accurancy,bonuses,pers_id,totalnet,totalgross) VALUES (?,?,?,?,?,?,?)");
-        preparedStatement.setLong(1, id);
-        preparedStatement.setDouble(2, salary.getDeduction());
-        preparedStatement.setDouble(3,salary.getAccurancy());
-        preparedStatement.setDouble(4,salary.getBonuses());
-        preparedStatement.setString(5,salary.getEmp_id());
-        preparedStatement.setDouble(6,calculateTotalNet(salary));
-        preparedStatement.setDouble(7,calculateTotalGross(salary));
-
-        preparedStatement.executeUpdate();
-        preparedStatement.close();
+            preparedStatement.executeUpdate();
+            preparedStatement.close();
+        }
     }
 
     @Override
@@ -81,5 +86,13 @@ public class SalaryDAOImpl implements SalaryDAO{
         }
         statement.close();
         return list;
+    }
+
+    public List<String> getErrors(){
+        return errors;
+    }
+
+    public void clearErrors(){
+        errors.clear();
     }
 }

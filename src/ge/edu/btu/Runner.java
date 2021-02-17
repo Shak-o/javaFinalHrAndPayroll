@@ -29,7 +29,10 @@ public class Runner {
         employeeDAO.closeConnection();
 
          */
-        //salaryDAO.addSalary(new SalaryView("553323412",15,100,50));
-
+        salaryDAO.addSalary(new Salary("1",15,100,50));
+        List<String> errors = salaryDAO.getErrors();
+        for (String error:errors){
+            System.out.println(error);
+        }
     }
 }

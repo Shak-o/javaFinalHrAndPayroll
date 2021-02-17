@@ -12,4 +12,6 @@ public interface SalaryDAO {
     void deleteSalary();
     void editSalary();
     List<SalaryView> getAllSalaries() throws SQLException;
+    List<String> getErrors();
+    void clearErrors();
 }
