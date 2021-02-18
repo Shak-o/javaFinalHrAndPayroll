@@ -46,6 +46,8 @@ public class SocketThread extends Thread {
                     case ADD_EMPLOYEE:
                         Employee employee = (Employee) in.readObject();
                         employeeDAO.addEmployee(employee);
+                        out.writeObject(employeeDAO.getErrors());
+                        employeeDAO.clearErrors();
                         break;
                     case ADD_SALARY:
                         Salary salary = (Salary) in.readObject();

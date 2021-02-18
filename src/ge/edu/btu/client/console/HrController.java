@@ -197,12 +197,18 @@ public class HrController {
 
     public void addEmployee() throws IOException, ClassNotFoundException {
         Employee employee = new Employee(
-                nameField.getText(), surnameField.getText(), nicknameField.getText(), ageField.getText(), genderField.getText(), persIdField.getText(), positionNameField.getText());
+                nameField.getText(), surnameField.getText(), nicknameField.getText(), ageField.getText(), genderField.getText(), positionNameField.getText(), persIdField.getText());
         Socket socket = new Socket("localhost", 8080);
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         out.writeObject(Command.ADD_EMPLOYEE);
         out.writeObject(employee);
+        List<String> errors = (List<String>) in.readObject();
+        if (errors.size()>0) {
+            for (String error : errors) {
+                System.out.println(error);
+            }
+        }
         out.writeObject(Command.GET_ALL_EMPLOYEES);
         // List<ge.edu.btu.server.model.Employee> employees = client.getEmployeeList().employees;
         List<EmployeeView> employees = (List<EmployeeView>) in.readObject();
@@ -236,10 +242,6 @@ public class HrController {
             if (errors.size()>0) {
                 Popup popup = new Popup();
                 for (String error : errors) {
-                    Label label = new Label(error);
-                    popup.getContent().add(label);
-                    final Stage stage = new Stage();
-                    popup.show(stage);
                     System.out.println(error);
                 }
             }

@@ -12,7 +12,10 @@ public interface EmployeeDAO {
     void deleteEmployee(String p_id) throws SQLException;
     void editEmployee(long id, EmployeeView employee) throws SQLException;
     void closeConnection() throws SQLException;
-    void testResult(String tposition) throws SQLException;
     List<EmployeeView> getAllEmployees() throws SQLException;
     void getEmployee();
+    List<String> checkEmployeeID(Employee employee) throws SQLException;
+    List<String> getErrors();
+    void clearErrors();
+
 }
