@@ -39,38 +39,54 @@ public class EmployeeDAOImpl implements EmployeeDAO {
         return result;
     }
 
+    public boolean checkEmployeeFields(Employee employee){
+        if (employee.getP_id() == null || employee.getPosition().equals("") || employee.getAge().equals("") || employee.getGender().equals("") || employee.getName().equals("") || employee.getSurname().equals("") || employee.getNickname().equals("")){
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
     @Override
     public void addEmployee(Employee employee) throws SQLException {
         List<String> result = checkEmployeeID(employee);
-        if (result.size() > 0){
-            errors.add("Employee with similar ID already exists:"+result.get(0));
-        }
-        else {
-            //get position id
-            String positionId = "";
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '" + employee.getPosition() + "'");
-            while (resultSet.next()) {
-                String position_id = resultSet.getString("position_id");
-                positionId = position_id;
+        if (checkEmployeeFields(employee)) {
+            if (result.size() > 0) {
+                errors.add("Employee with similar ID already exists:" + result.get(0));
             }
-            statement.close();
+            else {
+                //get position id
+                String positionId = "";
+                Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '" + employee.getPosition() + "'");
+                while (resultSet.next()) {
+                    String position_id = resultSet.getString("position_id");
+                    positionId = position_id;
+                }
+                statement.close();
 
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
-                    "(name,surname,nickname,age,gender,p_id,position,active_date,position_id) VALUES (?,?,?,?,?,?,?,?,?)");
-            preparedStatement.setString(1, employee.getName());
-            preparedStatement.setString(2, employee.getSurname());
-            preparedStatement.setString(3, employee.getNickname());
-            preparedStatement.setString(4, employee.getAge());
-            preparedStatement.setString(5, employee.getGender());
-            preparedStatement.setString(6, employee.getP_id());
-            preparedStatement.setString(7, employee.getPosition());
-            preparedStatement.setString(8, getDateToday());
-            preparedStatement.setString(9, positionId);
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
+                        "(name,surname,nickname,age,gender,p_id,position,active_date,position_id) VALUES (?,?,?,?,?,?,?,?,?)");
+                preparedStatement.setString(1, employee.getName());
+                preparedStatement.setString(2, employee.getSurname());
+                preparedStatement.setString(3, employee.getNickname());
+                preparedStatement.setString(4, employee.getAge());
+                preparedStatement.setString(5, employee.getGender());
+                preparedStatement.setString(6, employee.getP_id());
+                preparedStatement.setString(7, employee.getPosition());
+                preparedStatement.setString(8, getDateToday());
+                preparedStatement.setString(9, positionId);
 
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+            }
         }
+
+        else {
+            errors.add("All fields must be filled to add new employee");
+        }
+
     }
 
     @Override

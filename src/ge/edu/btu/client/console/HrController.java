@@ -10,8 +10,12 @@ import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 
@@ -195,6 +199,21 @@ public class HrController {
         socket.close();
     }
 
+    private void addPopup(List<String> errors){
+        Stage popupwindow=new Stage();
+        popupwindow.initModality(Modality.APPLICATION_MODAL);
+        popupwindow.setTitle("Error while executing your command!");
+        for (String error:errors){
+            Label label1= new Label(error);
+            VBox layout= new VBox(10);
+            layout.getChildren().addAll(label1);
+            layout.setAlignment(Pos.CENTER);
+            Scene scene1= new Scene(layout, 300, 250);
+            popupwindow.setScene(scene1);
+            popupwindow.showAndWait();
+        }
+    }
+
     public void addEmployee() throws IOException, ClassNotFoundException {
         Employee employee = new Employee(
                 nameField.getText(), surnameField.getText(), nicknameField.getText(), ageField.getText(), genderField.getText(), positionNameField.getText(), persIdField.getText());
@@ -205,9 +224,7 @@ public class HrController {
         out.writeObject(employee);
         List<String> errors = (List<String>) in.readObject();
         if (errors.size()>0) {
-            for (String error : errors) {
-                System.out.println(error);
-            }
+           addPopup(errors);
         }
         out.writeObject(Command.GET_ALL_EMPLOYEES);
         // List<ge.edu.btu.server.model.Employee> employees = client.getEmployeeList().employees;
@@ -240,10 +257,7 @@ public class HrController {
             out.writeObject(salary);
             List<String> errors = (List<String>) in.readObject();
             if (errors.size()>0) {
-                Popup popup = new Popup();
-                for (String error : errors) {
-                    System.out.println(error);
-                }
+                addPopup(errors);
             }
             out.writeObject(Command.GET_ALL_SALARIES);
             List<SalaryView> salaries = (List<SalaryView>) in.readObject();

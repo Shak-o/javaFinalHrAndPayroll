@@ -18,6 +18,7 @@ public class HrApp extends Application {
         stage.setScene(new Scene(root,700,600));
         stage.show();
     }
+
     public static void main (String[] args) throws IOException, ClassNotFoundException {
         launch(args);
     }
