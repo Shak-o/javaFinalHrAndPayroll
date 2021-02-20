@@ -208,7 +208,7 @@ public class HrController {
             VBox layout= new VBox(10);
             layout.getChildren().addAll(label1);
             layout.setAlignment(Pos.CENTER);
-            Scene scene1= new Scene(layout, 300, 250);
+            Scene scene1= new Scene(layout, 250, 100);
             popupwindow.setScene(scene1);
             popupwindow.showAndWait();
         }

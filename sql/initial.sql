@@ -27,3 +27,15 @@ CREATE TABLE salary (
     bonuses FLOAT
 );
 
+CREATE TABLE custom_salary (
+    id BIGSERIAL PRIMARY KEY,
+    emp_id BIGSERIAL,
+    component1 FLOAT,
+    component2 FLOAT,
+    component3 FLOAT,
+    component4 FLOAT,
+    component5 FLOAT,
+    component6 FLOAT,
+    total FLOAT
+);
+

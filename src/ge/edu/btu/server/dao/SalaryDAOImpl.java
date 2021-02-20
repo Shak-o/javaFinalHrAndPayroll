@@ -29,6 +29,21 @@ public class SalaryDAOImpl implements SalaryDAO{
         return totalGross;
     }
 
+    private boolean checkSalary(Salary salary) throws SQLException {
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT * FROM salary FULL OUTER JOIN custom_salary on custom_salary.emp_id = salary.emp_id WHERE pers_id = '" + salary.getEmp_id() + "'");
+        while (resultSet.next()) {
+            errors.add("Salary or custom salary for this employee already exists: " + String.valueOf(salary.getEmp_id()));
+        }
+        statement.close();
+        if (errors.size() == 0){
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
     @Override
     public void addSalary(Salary salary) throws SQLException {
         Long id = null;
@@ -38,22 +53,23 @@ public class SalaryDAOImpl implements SalaryDAO{
             id = resultSet.getLong("id");
         }
         statement.close();
-        if (id == null){
-            errors.add("ID not found!");
-        }
-        else {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO salary " +
-                    "(emp_id,deduction,accurancy,bonuses,pers_id,totalnet,totalgross) VALUES (?,?,?,?,?,?,?)");
-            preparedStatement.setLong(1, id);
-            preparedStatement.setDouble(2, salary.getDeduction());
-            preparedStatement.setDouble(3, salary.getAccurancy());
-            preparedStatement.setDouble(4, salary.getBonuses());
-            preparedStatement.setString(5, salary.getEmp_id());
-            preparedStatement.setDouble(6, calculateTotalNet(salary));
-            preparedStatement.setDouble(7, calculateTotalGross(salary));
+        if (checkSalary(salary)) {
+            if (id == null) {
+                errors.add("Employee with this ID not found!");
+            } else {
+                PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO salary " +
+                        "(emp_id,deduction,accurancy,bonuses,pers_id,totalnet,totalgross) VALUES (?,?,?,?,?,?,?)");
+                preparedStatement.setLong(1, id);
+                preparedStatement.setDouble(2, salary.getDeduction());
+                preparedStatement.setDouble(3, salary.getAccurancy());
+                preparedStatement.setDouble(4, salary.getBonuses());
+                preparedStatement.setString(5, salary.getEmp_id());
+                preparedStatement.setDouble(6, calculateTotalNet(salary));
+                preparedStatement.setDouble(7, calculateTotalGross(salary));
 
-            preparedStatement.executeUpdate();
-            preparedStatement.close();
+                preparedStatement.executeUpdate();
+                preparedStatement.close();
+            }
         }
     }
 

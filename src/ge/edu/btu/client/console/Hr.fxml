@@ -3,7 +3,6 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.skin.TabPaneSkin.TabControlButtons?>
 <StackPane prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ge.edu.btu.client.console.HrController">
    <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE">
      <tabs>
@@ -81,6 +80,38 @@
                          <TextField fx:id="deductionField" prefHeight="25.0" prefWidth="202.0" promptText="Deduction" />
                          <TextField fx:id="accurancyField" promptText="Accurancy" />
                          <TextField fx:id="bonusesField" promptText="Bonuses" />
+                         <Button contentDisplay="RIGHT" onAction="#addSalary" prefHeight="25.0" prefWidth="198.0">Create</Button>
+                     </VBox>
+                 </HBox>
+             </content>
+         </Tab>
+         <Tab text="Custom Salaries">
+             <content>
+                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                 <HBox>
+                     <VBox>
+                         <TableView fx:id="customSalaryTable" prefHeight="571.0" prefWidth="499.0">
+                             <columns>
+                                 <TableColumn fx:id="empIdColumn" text="Employee ID" />
+                                 <TableColumn fx:id="component1Column" text="Component1" />
+                                 <TableColumn fx:id="component2Column" text="Component2" />
+                                 <TableColumn fx:id="component3Column" text="Component3" />
+                                 <TableColumn fx:id="component4Column" text="Component4" />
+                                 <TableColumn fx:id="component5Column" text="Component5" />
+                                 <TableColumn fx:id="component6Column" text="Component6" />
+                                 <TableColumn fx:id="calculatedColumn" text="Calculated" />
+                             </columns>
+                         </TableView>
+                     </VBox>
+                     <VBox>
+                         <TextField fx:id="customSalaryEmployeeIdField" promptText="Employee ID" />
+                         <TextField fx:id="component1" prefHeight="25.0" prefWidth="202.0" promptText="Component1" />
+                         <TextField fx:id="component2" promptText="Component2" />
+                         <TextField fx:id="component3" promptText="Component3" />
+                         <TextField fx:id="component4" promptText="Component4" />
+                         <TextField fx:id="component5" promptText="Component5" />
+                         <TextField fx:id="component6" promptText="Component6" />
+                         <TextArea fx:id="formula"  prefHeight="114.0" prefWidth="202.0" promptText="Create your own formula like: [Component1]+[Component2]/0.98/0.8 ..." />
                          <Button contentDisplay="RIGHT" onAction="#addSalary" prefHeight="25.0" prefWidth="198.0">Create</Button>
                      </VBox>
                  </HBox>

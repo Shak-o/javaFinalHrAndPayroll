@@ -4,10 +4,12 @@ import ge.edu.btu.common.EmployeeView;
 import ge.edu.btu.common.OfficeView;
 import ge.edu.btu.common.SalaryView;
 import ge.edu.btu.server.dao.*;
+import ge.edu.btu.server.model.CustomSalary;
 import ge.edu.btu.server.model.Employee;
 import ge.edu.btu.server.model.Office;
 import ge.edu.btu.server.model.Salary;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -29,10 +31,60 @@ public class Runner {
         employeeDAO.closeConnection();
 
          */
+        /*
         salaryDAO.addSalary(new Salary("1",15,100,50));
         List<String> errors = salaryDAO.getErrors();
         for (String error:errors){
             System.out.println(error);
+        }
+
+
+         */
+        calculateTotals("[FirstComponent]-[SecondComponent]*[ThirdComponent]/[0.98]+[2]");
+
+        }
+    private static void calculateTotals(String formula) {
+        List<String> newFormula = new ArrayList<>();
+        String component = "";
+        String operator;
+        String number = "";
+        // Creating array of string length
+        int formulaLength = formula.length();
+        char[] separatedFormula = new char[formulaLength];
+
+        // Copy character by character into array
+        for (int i = 0; i < formulaLength; i++) {
+            separatedFormula[i] = formula.charAt(i);
+        }
+
+        // Printing content of array
+        for (char c : separatedFormula) {
+            component += String.valueOf(c);
+            if (c == ']' && !component.equals("]")){
+                newFormula.add(component);
+                component="";
+            }
+            if (c == ']' && number.length() > 0){
+                newFormula.add(number);
+                number = "";
+                operator = "";
+
+            }
+            if(c == '+' || c == '-' || c == '/' || c == '*'){
+                operator = String.valueOf(c);
+                newFormula.add(operator);
+                operator = "";
+                component = "";
+            }
+            if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == '.'){
+                number += String.valueOf(c);
+                operator = "";
+                component = "";
+            }
+
+        }
+        for (String f:newFormula){
+            System.out.println(f);
         }
     }
 }
