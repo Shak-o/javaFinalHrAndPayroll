@@ -19,6 +19,10 @@ public class Runner {
     public static void main (String[] args) throws SQLException {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         SalaryDAO salaryDAO = new SalaryDAOImpl();
+        CustomSalaryDAO customSalaryDAO = new CustomSalaryDAOImpl();
+        CustomSalary test = new CustomSalary("0000001",10,1,2,3,4,5,"[firstcomponent]-[secondcomponent]-[thirdcomponent]");
+        List<String> formula = customSalaryDAO.readFormula(test);
+        customSalaryDAO.calculateTotal(formula,test);
         //employeeDAO.addEmployee(new Employee("first","employee","n","1","male","test","12345678901",("SALES:0,SALE_PRODUCTS:1,EXPENSES:2,EXPENSES_ITEMS:3")));
         //List<EmployeeView> employeeList = employeeDAO.getAllEmployees();
 
@@ -40,6 +44,7 @@ public class Runner {
 
 
          */
+        /*
         calculateTotals("[FirstComponent]-[SecondComponent]*[ThirdComponent]/[0.98]+[2]");
 
         }
@@ -86,5 +91,7 @@ public class Runner {
         for (String f:newFormula){
             System.out.println(f);
         }
+
+         */
     }
 }

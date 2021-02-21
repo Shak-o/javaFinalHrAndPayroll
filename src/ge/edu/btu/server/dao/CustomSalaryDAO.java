@@ -10,4 +10,6 @@ public interface CustomSalaryDAO {
     void deleteCustomSalary(long id);
     List<String> getErrors();
     void clearErrors();
+    public List<String> readFormula(CustomSalary customSalary);
+    public double calculateTotal(List<String> customFormula, CustomSalary customSalary);
 }

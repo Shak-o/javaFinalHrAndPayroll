@@ -5,6 +5,7 @@ import ge.edu.btu.server.model.Salary;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CustomSalaryDAOImpl implements CustomSalaryDAO {
@@ -31,7 +32,7 @@ public class CustomSalaryDAOImpl implements CustomSalaryDAO {
         }
     }
 
-    private double calculateTotal(CustomSalary customSalary) {
+    public List<String> readFormula(CustomSalary customSalary) {
         // Creating array of string length
         List<String> newFormula = new ArrayList<>();
         int formulaLength = customSalary.getFormula().length();
@@ -72,6 +73,56 @@ public class CustomSalaryDAOImpl implements CustomSalaryDAO {
             }
 
         }
+        return newFormula;
+    }
+
+    public double calculateTotal(List<String> customFormula, CustomSalary customSalary){
+        HashMap<String,Double> test = new HashMap<String, Double>();
+        test.put("[firstcomponent]",customSalary.getComponent1());
+        test.put("[secondcomponent]",customSalary.getComponent2());
+        test.put("[thirdcomponent]",customSalary.getComponent3());
+        test.put("[fourthcomponent]",customSalary.getComponent4());
+        test.put("[fifhcomponent]",customSalary.getComponent5());
+        test.put("[sixthcomponent]",customSalary.getComponent6());
+        List<String> testData = customFormula;
+
+        double total = 0;
+        try {
+            for (int i = 0; i != customFormula.size(); i++) {
+                String part = customFormula.get(i);
+                if (part.equals("-")) {
+                    String minusMember = customFormula.get(customFormula.indexOf(part) + 1);
+                    total -= test.get(minusMember);
+                    customFormula.remove(minusMember);
+                }
+                /*
+                if (part.equals("+")) {
+                    String minusMember = customFormula.get(customFormula.indexOf(part) + 1);
+                    total += test.get(minusMember);
+                    customFormula.remove(minusMember);
+                }
+                if (part.equals("*")) {
+                    String minusMember = customFormula.get(customFormula.indexOf(part) + 1);
+                    total *= test.get(minusMember);
+                    customFormula.remove(minusMember);
+                }
+                if (part.equals("*")) {
+                    String minusMember = customFormula.get(customFormula.indexOf(part) + 1);
+                    total *= test.get(minusMember);
+                    customFormula.remove(minusMember);
+                }
+
+                 */
+
+                else {
+                    total += test.get(part);
+                }
+            }
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
+        System.out.println(total);
         return 0;
     }
 
@@ -97,7 +148,7 @@ public class CustomSalaryDAOImpl implements CustomSalaryDAO {
                 preparedStatement.setDouble(5,customSalary.getComponent4());
                 preparedStatement.setDouble(6,customSalary.getComponent5());
                 preparedStatement.setDouble(7,customSalary.getComponent6());
-                preparedStatement.setDouble(8,calculateTotal(customSalary));
+                preparedStatement.setDouble(8,calculateTotal(readFormula(customSalary),customSalary));
 
                 preparedStatement.executeUpdate();
                 preparedStatement.close();

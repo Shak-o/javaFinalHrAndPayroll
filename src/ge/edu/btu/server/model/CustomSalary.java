@@ -1,5 +1,10 @@
 package ge.edu.btu.server.model;
 
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+
 public class CustomSalary {
     private String emp_id;
     private double component1;
