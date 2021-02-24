@@ -2,11 +2,15 @@ package ge.edu.btu.server.dao;
 
 import ge.edu.btu.server.model.CustomSalary;
 import ge.edu.btu.server.model.Salary;
+import ge.edu.btu.server.outside.eval;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
 
 public class CustomSalaryDAOImpl implements CustomSalaryDAO {
     private final Connection connection;
@@ -60,7 +64,7 @@ public class CustomSalaryDAOImpl implements CustomSalaryDAO {
                 operator = "";
                 component = "";
             }
-            if (c == '+' || c == '-' || c == '/' || c == '*'){
+            if (c == '+' || c == '-' || c == '/' || c == '*' || c == '(' || c == ')'){
                 operator = String.valueOf(c);
                 newFormula.add(operator);
                 operator = "";
@@ -76,7 +80,7 @@ public class CustomSalaryDAOImpl implements CustomSalaryDAO {
         return newFormula;
     }
 
-    public double calculateTotal(List<String> customFormula, CustomSalary customSalary){
+    public double calculateTotal(List<String> customFormula, CustomSalary customSalary)  {
         HashMap<String,Double> test = new HashMap<String, Double>();
         test.put("[firstcomponent]",customSalary.getComponent1());
         test.put("[secondcomponent]",customSalary.getComponent2());
@@ -84,46 +88,31 @@ public class CustomSalaryDAOImpl implements CustomSalaryDAO {
         test.put("[fourthcomponent]",customSalary.getComponent4());
         test.put("[fifhcomponent]",customSalary.getComponent5());
         test.put("[sixthcomponent]",customSalary.getComponent6());
-        List<String> testData = customFormula;
-
+        String result = "";
         double total = 0;
         try {
             for (int i = 0; i != customFormula.size(); i++) {
                 String part = customFormula.get(i);
-                if (part.equals("-")) {
-                    String minusMember = customFormula.get(customFormula.indexOf(part) + 1);
-                    total -= test.get(minusMember);
-                    customFormula.remove(minusMember);
-                }
-                /*
-                if (part.equals("+")) {
-                    String minusMember = customFormula.get(customFormula.indexOf(part) + 1);
-                    total += test.get(minusMember);
-                    customFormula.remove(minusMember);
-                }
-                if (part.equals("*")) {
-                    String minusMember = customFormula.get(customFormula.indexOf(part) + 1);
-                    total *= test.get(minusMember);
-                    customFormula.remove(minusMember);
-                }
-                if (part.equals("*")) {
-                    String minusMember = customFormula.get(customFormula.indexOf(part) + 1);
-                    total *= test.get(minusMember);
-                    customFormula.remove(minusMember);
-                }
-
-                 */
-
-                else {
-                    total += test.get(part);
+                if (test.get(part) != null){
+                    customFormula.set(customFormula.indexOf(part), String.valueOf(test.get(part)));
                 }
             }
         }
         catch (Exception exception){
             exception.printStackTrace();
         }
-        System.out.println(total);
-        return 0;
+        for (int i = 0; i != customFormula.size(); i++) {
+            String part = customFormula.get(i);
+            result += part;
+        }
+        /*
+        ScriptEngineManager mgr = new ScriptEngineManager();
+        ScriptEngine engine = mgr.getEngineByName("JavaScript");
+        System.out.println(engine.eval(result));
+        System.out.println(result);
+
+         */
+        return eval.calculate(result);
     }
 
     @Override

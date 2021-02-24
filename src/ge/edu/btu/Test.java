@@ -9,18 +9,19 @@ import ge.edu.btu.server.model.Employee;
 import ge.edu.btu.server.model.Office;
 import ge.edu.btu.server.model.Salary;
 
+import javax.script.ScriptException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import java.sql.SQLException;
 
-public class Runner {
-    public static void main (String[] args) throws SQLException {
+public class Test {
+    public static void main (String[] args) throws SQLException, ScriptException {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         SalaryDAO salaryDAO = new SalaryDAOImpl();
         CustomSalaryDAO customSalaryDAO = new CustomSalaryDAOImpl();
-        CustomSalary test = new CustomSalary("0000001",10,1,2,3,4,5,"[firstcomponent]-[secondcomponent]-[thirdcomponent]");
+        CustomSalary test = new CustomSalary("0000001",10,1,2,3,4,5,"[firstcomponent]-[secondcomponent]-([thirdcomponent]/[0.98])");
         List<String> formula = customSalaryDAO.readFormula(test);
         customSalaryDAO.calculateTotal(formula,test);
         //employeeDAO.addEmployee(new Employee("first","employee","n","1","male","test","12345678901",("SALES:0,SALE_PRODUCTS:1,EXPENSES:2,EXPENSES_ITEMS:3")));
