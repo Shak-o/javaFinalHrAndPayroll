@@ -12,8 +12,15 @@ public class Employee implements Serializable {
     private String position;
     private String p_id;
     private String gender;
+    private Double firstComponent;
+    private Double secondComponent;
+    private Double thirdComponent;
+    private Double fourthComponent;
+    private Double fifthComponent;
+    private Double sixthComponent;
+    private String formulaName;
 
-    public Employee(String name, String surname, String nickname, String age,String gender, String position, String p_id) {
+    public Employee(String name, String surname, String nickname, String age, String position, String p_id, String gender, Double firstComponent, Double secondComponent, Double thirdComponent, Double fourthComponent, Double fifthComponent, Double sixthComponent, String formulaName) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
@@ -21,6 +28,65 @@ public class Employee implements Serializable {
         this.position = position;
         this.p_id = p_id;
         this.gender = gender;
+        this.firstComponent = firstComponent;
+        this.secondComponent = secondComponent;
+        this.thirdComponent = thirdComponent;
+        this.fourthComponent = fourthComponent;
+        this.fifthComponent = fifthComponent;
+        this.sixthComponent = sixthComponent;
+        this.formulaName = formulaName;
+    }
+
+    public String getFormulaName() {
+        return formulaName;
+    }
+
+    public Double getFirstComponent() {
+        return firstComponent;
+    }
+
+    public void setFirstComponent(Double firstComponent) {
+        this.firstComponent = firstComponent;
+    }
+
+    public Double getSecondComponent() {
+        return secondComponent;
+    }
+
+    public void setSecondComponent(Double secondComponent) {
+        this.secondComponent = secondComponent;
+    }
+
+    public Double getThirdComponent() {
+        return thirdComponent;
+    }
+
+    public void setThirdComponent(Double thirdComponent) {
+        this.thirdComponent = thirdComponent;
+    }
+
+    public Double getFourthComponent() {
+        return fourthComponent;
+    }
+
+    public void setFourthComponent(Double fourthComponent) {
+        this.fourthComponent = fourthComponent;
+    }
+
+    public Double getFifthComponent() {
+        return fifthComponent;
+    }
+
+    public void setFifthComponent(Double fifthComponent) {
+        this.fifthComponent = fifthComponent;
+    }
+
+    public Double getSixthComponent() {
+        return sixthComponent;
+    }
+
+    public void setSixthComponent(Double sixthComponent) {
+        this.sixthComponent = sixthComponent;
     }
 
     public String getName() {

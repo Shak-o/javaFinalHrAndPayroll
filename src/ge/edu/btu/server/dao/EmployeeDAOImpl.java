@@ -1,7 +1,10 @@
 package ge.edu.btu.server.dao;
 
 import ge.edu.btu.common.EmployeeView;
+import ge.edu.btu.server.model.CustomSalary;
 import ge.edu.btu.server.model.Employee;
+import ge.edu.btu.server.outside.eval;
+
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -40,13 +43,98 @@ public class EmployeeDAOImpl implements EmployeeDAO {
     }
 
     public boolean checkEmployeeFields(Employee employee){
-        if (employee.getP_id() == null || employee.getPosition().equals("") || employee.getAge().equals("") || employee.getGender().equals("") || employee.getName().equals("") || employee.getSurname().equals("") || employee.getNickname().equals("")){
+        if (employee.getP_id() == null || employee.getPosition().equals("") || employee.getAge().equals("") || employee.getGender().equals("") || employee.getName().equals("") || employee.getSurname().equals("") || employee.getNickname().equals("") || employee.getFormulaName().equals("")){
             return false;
         }
         else {
             return true;
         }
     }
+
+    private List<String> readFormula(Employee employee) throws SQLException {
+        String formulaOut = "";
+        Statement statement = connection.createStatement();
+        ResultSet resultSet = statement.executeQuery("SELECT formula FROM custom_salary WHERE name = '" + employee.getFormulaName() + "'");
+        List<String> newFormula = new ArrayList<>();
+        while (resultSet.next()) {
+            String formula = resultSet.getString("formula");
+            formulaOut = formula;
+        }
+        if (formulaOut.equals("")) {
+            errors.add("Formula with this name not found!");
+        }
+        else {
+            // Creating array of string length
+            int formulaLength = formulaOut.length();
+            String formula = formulaOut;
+            String component = "";
+            String operator;
+            String number = "";
+            char[] separatedFormula = new char[formulaLength];
+
+            // Copy character by character into array
+            for (int i = 0; i < formulaLength; i++) {
+                separatedFormula[i] = formula.charAt(i);
+            }
+
+            // Printing content of array
+            for (char c : separatedFormula) {
+                component += String.valueOf(c);
+                if (c == ']' && !component.equals("]")) {
+                    newFormula.add(component);
+                    component = "";
+                }
+                if (c == ']' && number.length() > 0) {
+                    newFormula.add(number);
+                    number = "";
+                    operator = "";
+                    component = "";
+                }
+                if (c == '+' || c == '-' || c == '/' || c == '*' || c == '(' || c == ')' || c == '^') {
+                    operator = String.valueOf(c);
+                    newFormula.add(operator);
+                    operator = "";
+                    component = "";
+                }
+                if (c == '0' || c == '1' || c == '2' || c == '3' || c == '4' || c == '5' || c == '6' || c == '7' || c == '8' || c == '9' || c == '.') {
+                    number += String.valueOf(c);
+                    operator = "";
+                    component = "";
+                }
+            }
+        }
+        return newFormula;
+    }
+
+    public double calculateTotal(List<String> customFormula, Employee employee)  {
+        HashMap<String,Double> components = new HashMap<String, Double>();
+        components.put("[firstcomponent]",employee.getFirstComponent());
+        components.put("[secondcomponent]",employee.getSecondComponent());
+        components.put("[thirdcomponent]",employee.getThirdComponent());
+        components.put("[fourthcomponent]",employee.getFourthComponent());
+        components.put("[fifhcomponent]",employee.getFifthComponent());
+        components.put("[sixthcomponent]",employee.getSixthComponent());
+
+        String result = "";
+        double total = 0;
+        try {
+            for (int i = 0; i != customFormula.size(); i++) {
+                String part = customFormula.get(i);
+                if (components.get(part) != null){
+                    customFormula.set(customFormula.indexOf(part), String.valueOf(components.get(part)));
+                }
+            }
+        }
+        catch (Exception exception){
+            exception.printStackTrace();
+        }
+        for (int i = 0; i != customFormula.size(); i++) {
+            String part = customFormula.get(i);
+            result += part;
+        }
+        return eval.calculate(result);
+    }
+
 
     @Override
     public void addEmployee(Employee employee) throws SQLException {
@@ -58,6 +146,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             else {
                 //get position id
                 String positionId = "";
+                List<String> formula = readFormula(employee);
+                Double calculatedSalary = calculateTotal(formula, employee);
                 Statement statement = connection.createStatement();
                 ResultSet resultSet = statement.executeQuery("SELECT position_id FROM office WHERE position = '" + employee.getPosition() + "'");
                 while (resultSet.next()) {
@@ -67,7 +157,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                 statement.close();
 
                 PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO employee " +
-                        "(name,surname,nickname,age,gender,p_id,position,active_date,position_id) VALUES (?,?,?,?,?,?,?,?,?)");
+                        "(name,surname,nickname,age,gender,p_id,position,active_date,position_id, total_calculated) VALUES (?,?,?,?,?,?,?,?,?,?)");
                 preparedStatement.setString(1, employee.getName());
                 preparedStatement.setString(2, employee.getSurname());
                 preparedStatement.setString(3, employee.getNickname());
@@ -77,6 +167,7 @@ public class EmployeeDAOImpl implements EmployeeDAO {
                 preparedStatement.setString(7, employee.getPosition());
                 preparedStatement.setString(8, getDateToday());
                 preparedStatement.setString(9, positionId);
+                preparedStatement.setDouble(10,calculatedSalary);
 
                 preparedStatement.executeUpdate();
                 preparedStatement.close();
@@ -149,7 +240,8 @@ public class EmployeeDAOImpl implements EmployeeDAO {
             String age = resultSet.getString("age");
             String position = resultSet.getString("position");
             Double total = resultSet.getDouble("totalGross");
-            EmployeeView employee = new EmployeeView(name, surname, nickname, gender, age, p_id, position,total);
+            Double customTotal = resultSet.getDouble("total_calculated");
+            EmployeeView employee = new EmployeeView(name, surname, nickname, gender, age, p_id, position,total,customTotal);
             list.add(employee);
         }
         statement.close();

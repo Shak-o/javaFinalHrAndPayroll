@@ -1,5 +1,6 @@
 package ge.edu.btu.server.dao;
 
+import ge.edu.btu.common.CustomSalaryView;
 import ge.edu.btu.server.model.CustomSalary;
 
 import javax.script.ScriptException;
@@ -11,6 +12,6 @@ public interface CustomSalaryDAO {
     void deleteCustomSalary(long id);
     List<String> getErrors();
     void clearErrors();
-    public List<String> readFormula(CustomSalary customSalary);
-    public double calculateTotal(List<String> customFormula, CustomSalary customSalary) throws ScriptException;
+    List<CustomSalaryView> getAllCustomSalaries() throws SQLException;
+    //public double calculateTotal(List<String> customFormula, CustomSalary customSalary) throws ScriptException;
 }

@@ -18,7 +18,8 @@
                              <TableColumn fx:id="nicknameColumn" text="Nickname" />
                              <TableColumn fx:id="pIdColumn" text="Personal Id" />
                              <TableColumn fx:id="positionColumn" text="Position" />
-                             <TableColumn fx:id="empTotalColumn" text="Total Gross Salary" />
+                             <TableColumn fx:id="empTotalColumn" prefWidth="147.0" text="Total Gross Salary" />
+                             <TableColumn fx:id="empTotalCustomColumn" prefWidth="147.0" text="Custom gross" />
                          </columns>
                      </TableView>
                  </VBox>
@@ -30,6 +31,13 @@
                      <TextField fx:id="ageField" promptText="Age" />
                      <TextField fx:id="positionNameField" promptText="Position" />
                      <TextField fx:id="persIdField" promptText="Personal ID" />
+                     <TextField fx:id="firstComponentField" promptText="[firstcomponent]" />
+                     <TextField fx:id="secondComponentField" promptText="[secondcomponent]" />
+                     <TextField fx:id="thirdComponentField" promptText="[thirdcomponent]" />
+                     <TextField fx:id="fourthComponentField" promptText="[fourthcomponent]" />
+                     <TextField fx:id="fifthComponentField" promptText="[fifthcomponent]" />
+                     <TextField fx:id="sixthComponentField" promptText="[fisxtcomponent]" />
+                     <TextField fx:id="formulaNameField" promptText="Name of formula" />
                      <Button contentDisplay="RIGHT" onAction="#addEmployee" prefHeight="25.0" prefWidth="181.0">Create</Button>
                      <TextField fx:id="idForDelField" promptText="ID" />
                      <Button contentDisplay="RIGHT" onAction="#deleteEmployee" prefHeight="25.0" prefWidth="230.0">Delete</Button>
@@ -71,7 +79,7 @@
                                  <TableColumn fx:id="accurancyColumn" text="Accurancy" />
                                  <TableColumn fx:id="bonusesColumn" text="Bonuses" />
                                  <TableColumn fx:id="totalGrossColumn" text="Total Gross" />
-                                 <TableColumn fx:id="totalNetColumn" text="Total Net" />
+                                 <TableColumn fx:id="totalNetColumn" prefWidth="98.0" text="Total Net" />
                              </columns>
                          </TableView>
                      </VBox>
@@ -92,27 +100,15 @@
                      <VBox>
                          <TableView fx:id="customSalaryTable" prefHeight="571.0" prefWidth="499.0">
                              <columns>
-                                 <TableColumn fx:id="empIdColumn" text="Employee ID" />
-                                 <TableColumn fx:id="component1Column" text="Component1" />
-                                 <TableColumn fx:id="component2Column" text="Component2" />
-                                 <TableColumn fx:id="component3Column" text="Component3" />
-                                 <TableColumn fx:id="component4Column" text="Component4" />
-                                 <TableColumn fx:id="component5Column" text="Component5" />
-                                 <TableColumn fx:id="component6Column" text="Component6" />
-                                 <TableColumn fx:id="calculatedColumn" text="Calculated" />
+                                 <TableColumn fx:id="customSalaryNameColumn" prefWidth="132.0" text="Name" />
+                                 <TableColumn fx:id="customSalaryFormulaColumn" prefWidth="366.0" text="Formula" />
                              </columns>
                          </TableView>
                      </VBox>
                      <VBox>
-                         <TextField fx:id="customSalaryEmployeeIdField" promptText="Employee ID" />
-                         <TextField fx:id="component1" prefHeight="25.0" prefWidth="202.0" promptText="Component1" />
-                         <TextField fx:id="component2" promptText="Component2" />
-                         <TextField fx:id="component3" promptText="Component3" />
-                         <TextField fx:id="component4" promptText="Component4" />
-                         <TextField fx:id="component5" promptText="Component5" />
-                         <TextField fx:id="component6" promptText="Component6" />
-                         <TextArea fx:id="formula"  prefHeight="114.0" prefWidth="202.0" promptText="Create your own formula like: [Component1]+[Component2]/0.98/0.8 ..." />
-                         <Button contentDisplay="RIGHT" onAction="#addSalary" prefHeight="25.0" prefWidth="198.0">Create</Button>
+                         <TextField fx:id="customSalaryNameField" promptText="Name" />
+                         <TextArea fx:id="customSalaryFormulaField" prefHeight="114.0" prefWidth="202.0" promptText="Create your own formula like: [firstcomponent]+[secondcomponent]/0.98/0.8 ..." />
+                         <Button contentDisplay="RIGHT" onAction="#addCustomSalary" prefHeight="25.0" prefWidth="198.0">Create</Button>
                      </VBox>
                  </HBox>
              </content>

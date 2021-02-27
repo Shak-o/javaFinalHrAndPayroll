@@ -1,12 +1,11 @@
 package ge.edu.btu.client.console;
 
-import ge.edu.btu.common.Command;
-import ge.edu.btu.common.EmployeeView;
-import ge.edu.btu.common.OfficeView;
-import ge.edu.btu.common.SalaryView;
+import ge.edu.btu.common.*;
+import ge.edu.btu.server.model.CustomSalary;
 import ge.edu.btu.server.model.Employee;
 import ge.edu.btu.server.model.Salary;
 import javafx.beans.Observable;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -53,6 +52,9 @@ public class HrController {
     private TableColumn<EmployeeView, Double> empTotalColumn;
 
     @FXML
+    private TableColumn<EmployeeView, Double> empTotalCustomColumn;
+
+    @FXML
     private TextField nameField;
 
     @FXML
@@ -72,6 +74,27 @@ public class HrController {
 
     @FXML
     private TextField persIdField;
+
+    @FXML
+    private TextField firstComponentField;
+
+    @FXML
+    private TextField secondComponentField;
+
+    @FXML
+    private TextField thirdComponentField;
+
+    @FXML
+    private TextField fourthComponentField;
+
+    @FXML
+    private TextField fifthComponentField;
+
+    @FXML
+    private TextField sixthComponentField;
+
+    @FXML
+    private TextField formulaNameField;
 
     @FXML
     private TextField officeNameField;
@@ -114,6 +137,7 @@ public class HrController {
 
     @FXML
     private TableColumn<SalaryView, Double> totalNetColumn;
+
     @FXML
     private TextField employeeIdField;
 
@@ -126,14 +150,30 @@ public class HrController {
     @FXML
     private TextField bonusesField;
 
+    @FXML
+    private TableView<CustomSalaryView> customSalaryTable;
+
+    @FXML
+    private TableColumn<CustomSalaryView, String> customSalaryNameColumn;
+
+    @FXML
+    private TableColumn<CustomSalaryView, String> customSalaryFormulaColumn;
+
+    @FXML
+    private TextField customSalaryNameField;
+
+    @FXML
+    private TextArea customSalaryFormulaField;
 
     public void initialize() throws IOException, ClassNotFoundException {
         initEmployeesTable();
         initOfficeTable();
         initSalaryTable();
+        initCustomSalaryTable();
         reloadEmployeeTable();
         reloadOfficeTable();
         reloadSalaryTable();
+        reloadCustomSalaryTable();
     }
 
     private void initEmployeesTable(){
@@ -143,6 +183,7 @@ public class HrController {
         pIdColumn.setCellValueFactory(new PropertyValueFactory<>("p_id"));
         positionColumn.setCellValueFactory(new PropertyValueFactory<>("position"));
         empTotalColumn.setCellValueFactory(new PropertyValueFactory<>("total"));
+        empTotalCustomColumn.setCellValueFactory(new PropertyValueFactory<>("customTotal"));
     }
 
     private void initOfficeTable(){
@@ -158,6 +199,11 @@ public class HrController {
         bonusesColumn.setCellValueFactory(new PropertyValueFactory<>("bonuses"));
         totalGrossColumn.setCellValueFactory(new PropertyValueFactory<>("totalGross"));
         totalNetColumn.setCellValueFactory(new PropertyValueFactory<>("totalNet"));
+    }
+
+    private void initCustomSalaryTable(){
+        customSalaryNameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        customSalaryFormulaColumn.setCellValueFactory(new PropertyValueFactory<>("formula"));
     }
 
     private void reloadOfficeTable() throws IOException, ClassNotFoundException {
@@ -199,6 +245,17 @@ public class HrController {
         socket.close();
     }
 
+    private void reloadCustomSalaryTable() throws IOException, ClassNotFoundException {
+        Socket socket = new Socket("localhost",8080);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        out.writeObject(Command.GET_ALL_CUSTOM_SALARIES);
+        List<CustomSalaryView> customSalaries = (List<CustomSalaryView>) in.readObject();
+        ObservableList<CustomSalaryView> observableList = FXCollections.observableList(customSalaries);
+        customSalaryTable.setItems(observableList);
+        socket.close();
+    }
+
     private void addPopup(List<String> errors){
         Stage popupwindow=new Stage();
         popupwindow.initModality(Modality.APPLICATION_MODAL);
@@ -216,7 +273,7 @@ public class HrController {
 
     public void addEmployee() throws IOException, ClassNotFoundException {
         Employee employee = new Employee(
-                nameField.getText(), surnameField.getText(), nicknameField.getText(), ageField.getText(), genderField.getText(), positionNameField.getText(), persIdField.getText());
+                nameField.getText(), surnameField.getText(), nicknameField.getText(), ageField.getText(), genderField.getText(), positionNameField.getText(), persIdField.getText(), Double.valueOf(firstComponentField.getText()), Double.valueOf(secondComponentField.getText()),Double.valueOf(thirdComponentField.getText()),Double.valueOf(fourthComponentField.getText()),Double.valueOf(fifthComponentField.getText()),Double.valueOf(sixthComponentField.getText()), formulaNameField.getText());
         Socket socket = new Socket("localhost", 8080);
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
@@ -256,7 +313,7 @@ public class HrController {
             out.writeObject(Command.ADD_SALARY);
             out.writeObject(salary);
             List<String> errors = (List<String>) in.readObject();
-            if (errors.size()>0) {
+            if (errors.size() > 0) {
                 addPopup(errors);
             }
             out.writeObject(Command.GET_ALL_SALARIES);
@@ -264,6 +321,24 @@ public class HrController {
             ObservableList<SalaryView> observableList = FXCollections.observableList(salaries);
             salaryTable.setItems(observableList);
             socket.close();
+    }
+
+    public void addCustomSalary() throws IOException, ClassNotFoundException {
+        CustomSalary customSalary = new CustomSalary(customSalaryNameField.getText(), customSalaryFormulaField.getText());
+        Socket socket = new Socket("localhost", 8080);
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+        ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+        out.writeObject(Command.ADD_CUSTOM_SALARY);
+        out.writeObject(customSalary);
+        List<String> errors = (List<String>) in.readObject();
+        if (errors.size() > 0){
+            addPopup(errors);
+        }
+        out.writeObject(Command.GET_ALL_CUSTOM_SALARIES);
+        List<CustomSalaryView> customSalaries = (List<CustomSalaryView>) in.readObject();
+        ObservableList<CustomSalaryView> observableList = FXCollections.observableList(customSalaries);
+        customSalaryTable.setItems(observableList);
+        socket.close();
     }
 
     public void deleteEmployee() throws IOException, ClassNotFoundException {

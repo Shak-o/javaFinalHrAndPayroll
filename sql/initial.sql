@@ -8,9 +8,8 @@ CREATE TABLE employee (
     position VARCHAR(100),
     position_id VARCHAR(100),
     active_date VARCHAR(100),
-    salary varchar(100),
-    p_id VARCHAR(11) NOT NULL
-
+    p_id VARCHAR(11) NOT NULL,
+    total_calculated FLOAT
 );
 CREATE TABLE office (
     id BIGSERIAL PRIMARY KEY,
@@ -29,13 +28,6 @@ CREATE TABLE salary (
 
 CREATE TABLE custom_salary (
     id BIGSERIAL PRIMARY KEY,
-    emp_id BIGSERIAL,
-    component1 FLOAT,
-    component2 FLOAT,
-    component3 FLOAT,
-    component4 FLOAT,
-    component5 FLOAT,
-    component6 FLOAT,
-    total FLOAT
+    name VARCHAR(100),
+    formula VARCHAR(100)
 );
-

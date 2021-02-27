@@ -12,8 +12,9 @@ public class EmployeeView implements Serializable {
     private String p_id;
     private String gender;
     private Double total;
+    private Double customTotal;
 
-    public EmployeeView(String name, String surname, String nickname, String age, String gender, String p_id, String position, Double total) {
+    public EmployeeView(String name, String surname, String nickname, String age, String gender, String p_id, String position, Double total, Double customTotal) {
         this.name = name;
         this.surname = surname;
         this.nickname = nickname;
@@ -22,6 +23,11 @@ public class EmployeeView implements Serializable {
         this.p_id = p_id;
         this.gender = gender;
         this.total = total;
+        this.customTotal = customTotal;
+    }
+
+    public Double getCustomTotal() {
+        return customTotal;
     }
 
     public Double getTotal() {

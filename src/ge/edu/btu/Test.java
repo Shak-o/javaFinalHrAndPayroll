@@ -21,9 +21,12 @@ public class Test {
         EmployeeDAO employeeDAO = new EmployeeDAOImpl();
         SalaryDAO salaryDAO = new SalaryDAOImpl();
         CustomSalaryDAO customSalaryDAO = new CustomSalaryDAOImpl();
-        CustomSalary test = new CustomSalary("0000001",10,1,2,3,4,5,"[firstcomponent]-[secondcomponent]-([thirdcomponent]/[0.98])");
-        List<String> formula = customSalaryDAO.readFormula(test);
-        customSalaryDAO.calculateTotal(formula,test);
+
+        //employeeDAO.addEmployee(new Employee("test","ff","ff1","21","test","00000000001","mujik",10.0,2.0,1.0,4.0,5.0,6.0,"test"));
+        //CustomSalary test = new CustomSalary("test","[firstcomponent]-[secondcomponent]-([thirdcomponent]/[0.98])");
+        //customSalaryDAO.addCustomSalary(test);
+        //List<String> formula = customSalaryDAO.readFormula(test);
+        //customSalaryDAO.calculateTotal(formula,test);
         //employeeDAO.addEmployee(new Employee("first","employee","n","1","male","test","12345678901",("SALES:0,SALE_PRODUCTS:1,EXPENSES:2,EXPENSES_ITEMS:3")));
         //List<EmployeeView> employeeList = employeeDAO.getAllEmployees();
 

@@ -1,12 +1,11 @@
 package ge.edu.btu.server;
 
-import ge.edu.btu.common.Command;
-import ge.edu.btu.common.EmployeeView;
-import ge.edu.btu.common.OfficeView;
-import ge.edu.btu.common.SalaryView;
+import ge.edu.btu.common.*;
+import ge.edu.btu.server.dao.CustomSalaryDAO;
 import ge.edu.btu.server.dao.EmployeeDAO;
 import ge.edu.btu.server.dao.OfficeDAO;
 import ge.edu.btu.server.dao.SalaryDAO;
+import ge.edu.btu.server.model.CustomSalary;
 import ge.edu.btu.server.model.Employee;
 import ge.edu.btu.server.model.Salary;
 
@@ -23,14 +22,15 @@ public class SocketThread extends Thread {
     private EmployeeDAO employeeDAO;
     private OfficeDAO officeDAO;
     private SalaryDAO salaryDAO;
-    private boolean go = true;
+    private CustomSalaryDAO customSalaryDAO;
 
-    public SocketThread(Socket socket, EmployeeDAO employeeDAO, OfficeDAO officeDAO, SalaryDAO salaryDAO) throws IOException {
+    public SocketThread(Socket socket, EmployeeDAO employeeDAO, OfficeDAO officeDAO, SalaryDAO salaryDAO, CustomSalaryDAO customSalaryDAO) throws IOException {
         this.out = new ObjectOutputStream(socket.getOutputStream());
         this.in = new ObjectInputStream(socket.getInputStream());
         this.employeeDAO = employeeDAO;
         this.officeDAO = officeDAO;
         this.salaryDAO = salaryDAO;
+        this.customSalaryDAO = customSalaryDAO;
     }
 
     @Override
@@ -54,6 +54,12 @@ public class SocketThread extends Thread {
                         salaryDAO.addSalary(salary);
                         out.writeObject(salaryDAO.getErrors());
                         salaryDAO.clearErrors();
+                        break;
+                    case ADD_CUSTOM_SALARY:
+                        CustomSalary customSalary = (CustomSalary) in.readObject();
+                        customSalaryDAO.addCustomSalary(customSalary);
+                        out.writeObject(customSalaryDAO.getErrors());
+                        customSalaryDAO.clearErrors();
                         break;
                     case EDIT_OFFICE:
                       //  officeDAO.editStructure();
@@ -79,6 +85,10 @@ public class SocketThread extends Thread {
                     case GET_ALL_SALARIES:
                         List <SalaryView> salaryList = salaryDAO.getAllSalaries();
                         out.writeObject(salaryList);
+                        break;
+                    case GET_ALL_CUSTOM_SALARIES:
+                        List<CustomSalaryView> customSalaryList = customSalaryDAO.getAllCustomSalaries();
+                        out.writeObject(customSalaryList);
                         break;
                 }
 
